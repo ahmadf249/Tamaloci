@@ -1,0 +1,67 @@
+# Confidential product docs (local only — not for public GitHub)
+docs/
+
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+timeline.xctimeline
+playground.xcworkspace
+*.xcscmblueprint
+IDEWorkspaceChecks.plist
+
+# Secrets / env / signing (never publish)
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.mobileprovision
+AuthKey_*.p8
+Secrets/
+Config/Secrets.xcconfig
+
+# Fastlane local output
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# CocoaPods / Carthage (if added later)
+Pods/
+Carthage/Build/
+vendor/bundle/
+
+# Coverage / tests
+coverage/
+*.gcda
+*.gcno
+*.profdata
+
+# Editor / tooling
+.vscode/
+.cursor/
+.idea/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Misc
+*.swp
+*~

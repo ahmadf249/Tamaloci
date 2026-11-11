@@ -1,0 +1,507 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		10270A1F42E0DA721C12A203 /* PetAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D169D9E14805F6A55ECDBD82 /* PetAnimationController.swift */; };
+		1B0ED975CD082C5A3A8E601D /* PetNeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FC67748D41814A8716593F /* PetNeeds.swift */; };
+		231FCA7FE21A69E55E98FA54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BE9A10EA4053D1DA69F213D /* Assets.xcassets */; };
+		4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */; };
+		5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */; };
+		6ADC8BB2289BF7DD2A8FD9E7 /* PetCharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECFA57717B783E5C308256 /* PetCharacterView.swift */; };
+		73318AC782D9D2FF2F2E2644 /* PetHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9833CD333693197B1981B999 /* PetHomeView.swift */; };
+		B93837AC50DA9D0939AB7E71 /* PetLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900BE280EC1A045B28B02EDF /* PetLifecycle.swift */; };
+		C079F4B9170AFEEA0A19C081 /* PetExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */; };
+		CB29330DF05CCE4C7F03EBA0 /* PetExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC49DB6E431E73EFD0467E /* PetExpression.swift */; };
+		D81D8CBB3B07EF634EEF45BD /* 3D in Resources */ = {isa = PBXBuildFile; fileRef = E873DEE36FE8FF3947180D23 /* 3D */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B5D18CCB4BD7408A7FFAB7C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F7552FAAC79FA3EABDFF8B4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8CAA899EE4B39DB3E743830C;
+			remoteInfo = Tamaloci;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		26067839E3FC584C7EC1374D /* TamalociTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TamalociTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BE9A10EA4053D1DA69F213D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduralHeadBuilder.swift; sourceTree = "<group>"; };
+		4D8FCCF5978B791C9C2B08ED /* Tamaloci.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tamaloci.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpressionTests.swift; sourceTree = "<group>"; };
+		900BE280EC1A045B28B02EDF /* PetLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLifecycle.swift; sourceTree = "<group>"; };
+		9833CD333693197B1981B999 /* PetHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetHomeView.swift; sourceTree = "<group>"; };
+		A9FC67748D41814A8716593F /* PetNeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNeeds.swift; sourceTree = "<group>"; };
+		CBDC49DB6E431E73EFD0467E /* PetExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpression.swift; sourceTree = "<group>"; };
+		D169D9E14805F6A55ECDBD82 /* PetAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetAnimationController.swift; sourceTree = "<group>"; };
+		DAECFA57717B783E5C308256 /* PetCharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCharacterView.swift; sourceTree = "<group>"; };
+		E873DEE36FE8FF3947180D23 /* 3D */ = {isa = PBXFileReference; lastKnownFileType = folder; name = 3D; path = Resources/3D; sourceTree = SOURCE_ROOT; };
+		E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamalociApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		07377ED7F1762BDF7A8C4A19 /* PetHome */ = {
+			isa = PBXGroup;
+			children = (
+				9833CD333693197B1981B999 /* PetHomeView.swift */,
+			);
+			path = PetHome;
+			sourceTree = "<group>";
+		};
+		0B0B7987CE8ED7DB39121C1D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E873DEE36FE8FF3947180D23 /* 3D */,
+				3BE9A10EA4053D1DA69F213D /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1057030436D3E20DD6639186 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D8FCCF5978B791C9C2B08ED /* Tamaloci.app */,
+				26067839E3FC584C7EC1374D /* TamalociTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1FD577CFFC413FA84CA29E50 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				07377ED7F1762BDF7A8C4A19 /* PetHome */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		36E762793140D5327EB14F59 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4A0A8F140ACDD2DC664FA119 /* Domain */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4A0A8F140ACDD2DC664FA119 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		5FC761FEBCA537CEAD4A9A3E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		81DEDC119EEE6D08E64DCFE1 = {
+			isa = PBXGroup;
+			children = (
+				5FC761FEBCA537CEAD4A9A3E /* App */,
+				EF0C706181E3A3BE035D0994 /* Domain */,
+				1FD577CFFC413FA84CA29E50 /* Features */,
+				EAEE610E8548E003837518CB /* Rendering */,
+				0B0B7987CE8ED7DB39121C1D /* Resources */,
+				36E762793140D5327EB14F59 /* Tests */,
+				1057030436D3E20DD6639186 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A4909885F81D48ECC22B677A /* Pet */ = {
+			isa = PBXGroup;
+			children = (
+				CBDC49DB6E431E73EFD0467E /* PetExpression.swift */,
+				900BE280EC1A045B28B02EDF /* PetLifecycle.swift */,
+				A9FC67748D41814A8716593F /* PetNeeds.swift */,
+			);
+			path = Pet;
+			sourceTree = "<group>";
+		};
+		EAEE610E8548E003837518CB /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				D169D9E14805F6A55ECDBD82 /* PetAnimationController.swift */,
+				DAECFA57717B783E5C308256 /* PetCharacterView.swift */,
+				3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
+		EF0C706181E3A3BE035D0994 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				A4909885F81D48ECC22B677A /* Pet */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1710E769DDC2855333BE184C /* TamalociTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16CAFAF6019008ECE5E211E3 /* Build configuration list for PBXNativeTarget "TamalociTests" */;
+			buildPhases = (
+				9DBFCBB1585DAEE7DE799299 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				559D541E6921DD96D1F9E4BF /* PBXTargetDependency */,
+			);
+			name = TamalociTests;
+			packageProductDependencies = (
+			);
+			productName = TamalociTests;
+			productReference = 26067839E3FC584C7EC1374D /* TamalociTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8CAA899EE4B39DB3E743830C /* Tamaloci */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE7015B88E54999AF2653FC3 /* Build configuration list for PBXNativeTarget "Tamaloci" */;
+			buildPhases = (
+				BD29F293633E810B188FA8D9 /* Sources */,
+				8E979AE91DDE1B1CDD1DB08C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tamaloci;
+			packageProductDependencies = (
+			);
+			productName = Tamaloci;
+			productReference = 4D8FCCF5978B791C9C2B08ED /* Tamaloci.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5F7552FAAC79FA3EABDFF8B4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					8CAA899EE4B39DB3E743830C = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 9D42E9A2737592F6AE8B1647 /* Build configuration list for PBXProject "Tamaloci" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 81DEDC119EEE6D08E64DCFE1;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1057030436D3E20DD6639186 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8CAA899EE4B39DB3E743830C /* Tamaloci */,
+				1710E769DDC2855333BE184C /* TamalociTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8E979AE91DDE1B1CDD1DB08C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D81D8CBB3B07EF634EEF45BD /* 3D in Resources */,
+				231FCA7FE21A69E55E98FA54 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9DBFCBB1585DAEE7DE799299 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C079F4B9170AFEEA0A19C081 /* PetExpressionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD29F293633E810B188FA8D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10270A1F42E0DA721C12A203 /* PetAnimationController.swift in Sources */,
+				6ADC8BB2289BF7DD2A8FD9E7 /* PetCharacterView.swift in Sources */,
+				CB29330DF05CCE4C7F03EBA0 /* PetExpression.swift in Sources */,
+				73318AC782D9D2FF2F2E2644 /* PetHomeView.swift in Sources */,
+				B93837AC50DA9D0939AB7E71 /* PetLifecycle.swift in Sources */,
+				1B0ED975CD082C5A3A8E601D /* PetNeeds.swift in Sources */,
+				5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */,
+				4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		559D541E6921DD96D1F9E4BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8CAA899EE4B39DB3E743830C /* Tamaloci */;
+			targetProxy = B5D18CCB4BD7408A7FFAB7C8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4472D151E2B207064544A883 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		4D200C904C0527DAC3033FE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		90F2E550BCC468ED1DF37338 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "TAMA\"LO\"CI";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.Tamaloci;
+				PRODUCT_NAME = Tamaloci;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A17760832CE2FFFEB2D46E06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.TamalociTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tamaloci.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tamaloci";
+			};
+			name = Release;
+		};
+		AE175CFFF772E55CFFA10DFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.TamalociTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tamaloci.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tamaloci";
+			};
+			name = Debug;
+		};
+		FBE2A37659CE65CEC54EDE92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "TAMA\"LO\"CI";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.Tamaloci;
+				PRODUCT_NAME = Tamaloci;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		16CAFAF6019008ECE5E211E3 /* Build configuration list for PBXNativeTarget "TamalociTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE175CFFF772E55CFFA10DFD /* Debug */,
+				A17760832CE2FFFEB2D46E06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9D42E9A2737592F6AE8B1647 /* Build configuration list for PBXProject "Tamaloci" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4472D151E2B207064544A883 /* Debug */,
+				4D200C904C0527DAC3033FE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AE7015B88E54999AF2653FC3 /* Build configuration list for PBXNativeTarget "Tamaloci" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBE2A37659CE65CEC54EDE92 /* Debug */,
+				90F2E550BCC468ED1DF37338 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5F7552FAAC79FA3EABDFF8B4 /* Project object */;
+}
