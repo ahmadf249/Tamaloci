@@ -13,12 +13,12 @@ final class PetAnimationController {
     private var reduceMotion: Bool = false
     private var isBlinking = false
 
-    private let neutralMouthScale = SIMD3<Float>(1, 1, 1)
-    private let neutralMouthPosition = SIMD3<Float>(0, -0.045, 0.11)
-    private let neutralBrowY: Float = 0.06
-    private let leftEyeRest = SIMD3<Float>(-0.04, 0.025, 0.10)
-    private let rightEyeRest = SIMD3<Float>(0.04, 0.025, 0.10)
+    private let neutralMouthPosition = SIMD3<Float>(0, -0.048, 0.118)
+    private let neutralBrowY: Float = 0.062
+    private var leftEyeRest = SIMD3<Float>(-0.04, 0.025, 0.10)
+    private var rightEyeRest = SIMD3<Float>(0.04, 0.025, 0.10)
     private var baseEyeScale = SIMD3<Float>(1, 1, 1)
+    private var baseMouthWidth: Float = 1
     private var baseSkin = UIColor(red: 0.96, green: 0.80, blue: 0.70, alpha: 1)
 
     func attach(to headRoot: Entity, reduceMotion: Bool, configuration: AvatarConfiguration = .default) {
@@ -32,8 +32,20 @@ final class PetAnimationController {
 
     /// Call after `PetHeadFactory.applyConfiguration` so expression poses keep appearance.
     func applyAppearanceBaseline(_ configuration: AvatarConfiguration) {
-        baseEyeScale = SIMD3<Float>(repeating: configuration.eyeScale)
-        baseSkin = configuration.skinTint.uiColor
+        let config = configuration.clamped()
+        baseEyeScale = SIMD3<Float>(repeating: config.eyeScale)
+        baseMouthWidth = config.mouthWidth
+        baseSkin = config.skinTint.uiColor
+        leftEyeRest = [
+            ProceduralHeadBuilder.leftEyeRestX * config.eyeSpacing,
+            ProceduralHeadBuilder.eyeRestY,
+            ProceduralHeadBuilder.eyeRestZ
+        ]
+        rightEyeRest = [
+            ProceduralHeadBuilder.rightEyeRestX * config.eyeSpacing,
+            ProceduralHeadBuilder.eyeRestY,
+            ProceduralHeadBuilder.eyeRestZ
+        ]
     }
 
     func updateReduceMotion(_ enabled: Bool) {
@@ -73,7 +85,7 @@ final class PetAnimationController {
         let rightEye = head.findEntity(named: ProceduralHeadBuilder.rightEyeName)
         let skull = head.findEntity(named: ProceduralHeadBuilder.skullName) as? ModelEntity
 
-        var mouthScale = neutralMouthScale
+        var mouthScale = SIMD3<Float>(baseMouthWidth, 1, 1)
         var mouthPosition = neutralMouthPosition
         var browY = neutralBrowY
         var browTilt: Float = 0
@@ -85,34 +97,34 @@ final class PetAnimationController {
         case .neutral:
             break
         case .happy:
-            mouthScale = [1.25, 0.7, 1]
+            mouthScale = [baseMouthWidth * 1.25, 0.7, 1]
             mouthPosition.y = -0.04
             browY = 0.065
             browTilt = -0.15
         case .sad:
-            mouthScale = [0.9, 0.7, 1]
+            mouthScale = [baseMouthWidth * 0.9, 0.7, 1]
             mouthPosition.y = -0.052
             browY = 0.055
             browTilt = 0.25
             lidScaleY = 0.35
         case .hungry:
-            mouthScale = [0.7, 1.4, 1]
+            mouthScale = [baseMouthWidth * 0.7, 1.4, 1]
             mouthPosition.y = -0.05
             eyeScale = [1.05, 1.1, 1]
         case .sleepy:
-            mouthScale = [0.85, 0.5, 1]
+            mouthScale = [baseMouthWidth * 0.85, 0.5, 1]
             lidScaleY = 0.75
             browY = 0.05
             eyeScale = [1, 0.7, 1]
         case .sick:
-            mouthScale = [0.75, 0.6, 1]
+            mouthScale = [baseMouthWidth * 0.75, 0.6, 1]
             mouthPosition.y = -0.05
             browY = 0.052
             browTilt = 0.2
             lidScaleY = 0.4
             skin = UIColor(red: 0.78, green: 0.88, blue: 0.78, alpha: 1)
         case .distressed:
-            mouthScale = [0.95, 1.15, 1]
+            mouthScale = [baseMouthWidth * 0.95, 1.15, 1]
             mouthPosition.y = -0.048
             browY = 0.07
             browTilt = 0.35
@@ -120,7 +132,7 @@ final class PetAnimationController {
             eyeScale = [1.12, 1.18, 1]
             skin = UIColor(red: 0.98, green: 0.78, blue: 0.72, alpha: 1)
         case .deceased:
-            mouthScale = [0.8, 0.35, 1]
+            mouthScale = [baseMouthWidth * 0.8, 0.35, 1]
             lidScaleY = 1.0
             browY = 0.05
             eyeScale = [1, 0.4, 1]
@@ -137,13 +149,13 @@ final class PetAnimationController {
 
         if let leftBrow {
             var t = leftBrow.transform
-            t.translation = [-0.04, browY, 0.105]
+            t.translation = [leftEyeRest.x, browY, 0.105]
             t.rotation = simd_quatf(angle: browTilt, axis: [0, 0, 1])
             applyTransform(leftBrow, t, duration: duration)
         }
         if let rightBrow {
             var t = rightBrow.transform
-            t.translation = [0.04, browY, 0.105]
+            t.translation = [rightEyeRest.x, browY, 0.105]
             t.rotation = simd_quatf(angle: -browTilt, axis: [0, 0, 1])
             applyTransform(rightBrow, t, duration: duration)
         }

@@ -4,7 +4,7 @@ import SwiftUI
 struct TamalociApp: App {
     var body: some Scene {
         WindowGroup {
-            PetHomeView()
+            RootView()
         }
     }
 }

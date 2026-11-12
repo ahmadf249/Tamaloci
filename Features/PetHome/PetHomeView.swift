@@ -1,13 +1,19 @@
 import SwiftUI
 
 struct PetHomeView: View {
+    @Bindable var appModel: AppModel
     @State private var expressionState = PetExpressionTestState()
-    @State private var avatarStore = AvatarConfigurationStore()
-    @State private var avatarConfiguration: AvatarConfiguration = .default
     @State private var characterViewID = UUID()
+    @State private var showDebugHUD = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let brandTitle = "TAMA\"LO\"CI"
+
+    private var pet: CreatedPet? { appModel.petStore.pet }
+
+    private var avatarConfiguration: AvatarConfiguration {
+        pet?.avatarConfiguration ?? .default
+    }
 
     var body: some View {
         ZStack {
@@ -19,8 +25,17 @@ struct PetHomeView: View {
                     .foregroundStyle(.primary)
                     .accessibilityAddTraits(.isHeader)
                     .padding(.top, 12)
+                    .onLongPressGesture(minimumDuration: 1.2) {
+                        #if DEBUG
+                        showDebugHUD.toggle()
+                        #endif
+                    }
 
-                Text("M1 · avatar idle + expressions")
+                Text(pet.map { "\($0.name)" } ?? "Your pet")
+                    .font(.title3.weight(.semibold))
+                    .padding(.top, 4)
+
+                Text("Your stylized companion — camera is off.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .padding(.bottom, 8)
@@ -34,17 +49,18 @@ struct PetHomeView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal, 8)
 
-                expressionHUD
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 12)
-
-                avatarControls
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 24)
+                if showDebugHUD {
+                    debugPanel
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 24)
+                } else {
+                    Spacer().frame(height: 20)
+                }
             }
         }
         .onAppear {
-            avatarConfiguration = avatarStore.restore()
+            _ = appModel.petStore.restore()
+            characterViewID = UUID()
         }
     }
 
@@ -68,9 +84,10 @@ struct PetHomeView: View {
         .ignoresSafeArea()
     }
 
-    private var expressionHUD: some View {
+    #if DEBUG
+    private var debugPanel: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Test state · expressions")
+            Text("DEBUG · expressions")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
 
@@ -89,44 +106,22 @@ struct PetHomeView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(expressionState.expression == item ? Color.accentColor : Color.secondary.opacity(0.35))
-                    .accessibilityLabel("Set expression \(item.displayName)")
                 }
             }
+
+            Button("Reset onboarding") {
+                appModel.resetOnboardingForDebug()
+            }
+            .font(.caption.weight(.semibold))
         }
         .padding(14)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
-
-    private var avatarControls: some View {
-        HStack(spacing: 8) {
-            Button("Tweak look") {
-                let usingDefault = abs(avatarConfiguration.eyeScale - 1) < 0.01
-                let next: AvatarConfiguration
-                if usingDefault {
-                    next = AvatarConfiguration(
-                        skinTint: AvatarColor(red: 0.93, green: 0.74, blue: 0.62),
-                        eyeScale: 1.15,
-                        browScale: 1.2
-                    )
-                } else {
-                    next = .default
-                }
-                avatarConfiguration = next
-                avatarStore.save(next)
-            }
-            .buttonStyle(.bordered)
-
-            Button("Recreate view") {
-                avatarConfiguration = avatarStore.restore()
-                characterViewID = UUID()
-            }
-            .buttonStyle(.bordered)
-            .accessibilityLabel("Recreate avatar view from saved configuration")
-        }
-        .font(.caption.weight(.semibold))
-    }
+    #else
+    private var debugPanel: some View { EmptyView() }
+    #endif
 }
 
 #Preview {
-    PetHomeView()
+    PetHomeView(appModel: AppModel())
 }

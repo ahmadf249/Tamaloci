@@ -8,22 +8,38 @@
 
 /* Begin PBXBuildFile section */
 		0241796BC83B3342B84EBAFB /* AvatarConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCC65BD30D0D96D734056D5 /* AvatarConfigurationStore.swift */; };
+		0EE65459245B209A4665C181 /* SelfieCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3C2BD4990A3FA7DCE3266E /* SelfieCaptureView.swift */; };
 		10270A1F42E0DA721C12A203 /* PetAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D169D9E14805F6A55ECDBD82 /* PetAnimationController.swift */; };
 		1767E68ECD412DEB39A886B9 /* PetHeadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D456505EA565C8005C05EB90 /* PetHeadFactory.swift */; };
 		1B0ED975CD082C5A3A8E601D /* PetNeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FC67748D41814A8716593F /* PetNeeds.swift */; };
+		23190182273B04171CF55D75 /* CreatedPet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA6AFD4FCAD360CE923165A /* CreatedPet.swift */; };
 		231FCA7FE21A69E55E98FA54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BE9A10EA4053D1DA69F213D /* Assets.xcassets */; };
 		24421B10D78C5989582A35A5 /* AvatarColor+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E98DB28EE681515D231473 /* AvatarColor+UIKit.swift */; };
+		2B18131F6BABE3D4DD0FA597 /* LikenessSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */; };
+		33372781DC9219E46869CAA6 /* AvatarParameterMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93C572839BBDC6D8B72CAE1 /* AvatarParameterMapper.swift */; };
 		4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */; };
+		539A0BE1E4328567704E4309 /* PetNamingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F43928ADA43B5792BCE8FD /* PetNamingView.swift */; };
+		54E1DF5725B2E2E14A18C9C2 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A43B806FAA1E2284FB0C5 /* AppRouter.swift */; };
 		5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */; };
+		5C181A77BA59FD9E1A3A3B51 /* CreatedPetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE10FDA835EDB2E4270BF2 /* CreatedPetStore.swift */; };
 		6ADC8BB2289BF7DD2A8FD9E7 /* PetCharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECFA57717B783E5C308256 /* PetCharacterView.swift */; };
+		709F48FFE8D13A311A76544D /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645DF1CABEE1D81A6C9ABC59 /* OnboardingFlowView.swift */; };
+		713FA8A8DA2DB7EB6B608581 /* AvatarEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C29EF6981347CF028C81953 /* AvatarEditorView.swift */; };
 		720C0246957D956B3043DC60 /* PetExpressionTestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD6B1FC746B3AE518EE5D1 /* PetExpressionTestState.swift */; };
 		73318AC782D9D2FF2F2E2644 /* PetHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9833CD333693197B1981B999 /* PetHomeView.swift */; };
+		8528EFA36652129168244A7C /* ARKitFaceCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351DDA29984B56D1A39BD81C /* ARKitFaceCaptureService.swift */; };
+		8706BC3AC61BA4F14AB0FD89 /* CameraPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0400F3672E8465AA40B03CA5 /* CameraPermission.swift */; };
 		A7CFD2FB8BB4806D395BFB39 /* AvatarConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828AF2E62AE0F25C5B957BAC /* AvatarConfigurationTests.swift */; };
+		AABDE2AB97FF83E843D191C3 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F9BE41FCC1DC0574B2839E /* WelcomeView.swift */; };
 		B93837AC50DA9D0939AB7E71 /* PetLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900BE280EC1A045B28B02EDF /* PetLifecycle.swift */; };
+		BE432362624E0786D321EB84 /* ARFaceLivePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E019D1363E9B67A2F22C336 /* ARFaceLivePreviewView.swift */; };
 		C079F4B9170AFEEA0A19C081 /* PetExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */; };
 		CB29330DF05CCE4C7F03EBA0 /* PetExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC49DB6E431E73EFD0467E /* PetExpression.swift */; };
 		D81D8CBB3B07EF634EEF45BD /* 3D in Resources */ = {isa = PBXBuildFile; fileRef = E873DEE36FE8FF3947180D23 /* 3D */; };
+		DA4B1CA5EEF6AFC9E99564CF /* CreatedPetStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440BF2957B5C81915467E1B0 /* CreatedPetStoreTests.swift */; };
+		DEDDBAA6BDF8C980AFFC2A1D /* FaceCaptureCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF66499A934C9CD7861BC85B /* FaceCaptureCapability.swift */; };
 		E468A6A9B6DECCF222A8970B /* AvatarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D0C78DECB67FF190EBDAB8 /* AvatarConfiguration.swift */; };
+		E996F1A7B7DA4FA3AB16D1FB /* AvatarParameterMapper+Vision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B779D2BE1DF9106ACBA9E5 /* AvatarParameterMapper+Vision.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,24 +54,40 @@
 
 /* Begin PBXFileReference section */
 		02D0C78DECB67FF190EBDAB8 /* AvatarConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarConfiguration.swift; sourceTree = "<group>"; };
+		0400F3672E8465AA40B03CA5 /* CameraPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermission.swift; sourceTree = "<group>"; };
+		0A3C2BD4990A3FA7DCE3266E /* SelfieCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieCaptureView.swift; sourceTree = "<group>"; };
 		26067839E3FC584C7EC1374D /* TamalociTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TamalociTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C29EF6981347CF028C81953 /* AvatarEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarEditorView.swift; sourceTree = "<group>"; };
+		351DDA29984B56D1A39BD81C /* ARKitFaceCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitFaceCaptureService.swift; sourceTree = "<group>"; };
 		3BE9A10EA4053D1DA69F213D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3E019D1363E9B67A2F22C336 /* ARFaceLivePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARFaceLivePreviewView.swift; sourceTree = "<group>"; };
 		3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduralHeadBuilder.swift; sourceTree = "<group>"; };
+		440BF2957B5C81915467E1B0 /* CreatedPetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPetStoreTests.swift; sourceTree = "<group>"; };
 		4D8FCCF5978B791C9C2B08ED /* Tamaloci.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tamaloci.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpressionTests.swift; sourceTree = "<group>"; };
+		645DF1CABEE1D81A6C9ABC59 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikenessSampler.swift; sourceTree = "<group>"; };
+		70F9BE41FCC1DC0574B2839E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		72F43928ADA43B5792BCE8FD /* PetNamingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNamingView.swift; sourceTree = "<group>"; };
+		78B779D2BE1DF9106ACBA9E5 /* AvatarParameterMapper+Vision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarParameterMapper+Vision.swift"; sourceTree = "<group>"; };
 		828AF2E62AE0F25C5B957BAC /* AvatarConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarConfigurationTests.swift; sourceTree = "<group>"; };
+		892A43B806FAA1E2284FB0C5 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		900BE280EC1A045B28B02EDF /* PetLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLifecycle.swift; sourceTree = "<group>"; };
 		9833CD333693197B1981B999 /* PetHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetHomeView.swift; sourceTree = "<group>"; };
 		A9FC67748D41814A8716593F /* PetNeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNeeds.swift; sourceTree = "<group>"; };
 		AEAD6B1FC746B3AE518EE5D1 /* PetExpressionTestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpressionTestState.swift; sourceTree = "<group>"; };
+		AF66499A934C9CD7861BC85B /* FaceCaptureCapability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCaptureCapability.swift; sourceTree = "<group>"; };
 		AFCC65BD30D0D96D734056D5 /* AvatarConfigurationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarConfigurationStore.swift; sourceTree = "<group>"; };
 		B4E98DB28EE681515D231473 /* AvatarColor+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarColor+UIKit.swift"; sourceTree = "<group>"; };
 		CBDC49DB6E431E73EFD0467E /* PetExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpression.swift; sourceTree = "<group>"; };
 		D169D9E14805F6A55ECDBD82 /* PetAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetAnimationController.swift; sourceTree = "<group>"; };
 		D456505EA565C8005C05EB90 /* PetHeadFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetHeadFactory.swift; sourceTree = "<group>"; };
 		DAECFA57717B783E5C308256 /* PetCharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCharacterView.swift; sourceTree = "<group>"; };
+		DCBE10FDA835EDB2E4270BF2 /* CreatedPetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPetStore.swift; sourceTree = "<group>"; };
 		E873DEE36FE8FF3947180D23 /* 3D */ = {isa = PBXFileReference; lastKnownFileType = folder; name = 3D; path = Resources/3D; sourceTree = SOURCE_ROOT; };
 		E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamalociApp.swift; sourceTree = "<group>"; };
+		F93C572839BBDC6D8B72CAE1 /* AvatarParameterMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarParameterMapper.swift; sourceTree = "<group>"; };
+		FBA6AFD4FCAD360CE923165A /* CreatedPet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -64,6 +96,7 @@
 			children = (
 				02D0C78DECB67FF190EBDAB8 /* AvatarConfiguration.swift */,
 				AFCC65BD30D0D96D734056D5 /* AvatarConfigurationStore.swift */,
+				F93C572839BBDC6D8B72CAE1 /* AvatarParameterMapper.swift */,
 			);
 			path = Avatar;
 			sourceTree = "<group>";
@@ -97,6 +130,8 @@
 		1FD577CFFC413FA84CA29E50 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				FBDE431F85026364440DF0F9 /* Capture */,
+				4E8C157D6CB3AD5D98B9E950 /* Onboarding */,
 				07377ED7F1762BDF7A8C4A19 /* PetHome */,
 			);
 			path = Features;
@@ -114,14 +149,27 @@
 			isa = PBXGroup;
 			children = (
 				828AF2E62AE0F25C5B957BAC /* AvatarConfigurationTests.swift */,
+				440BF2957B5C81915467E1B0 /* CreatedPetStoreTests.swift */,
 				55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
 		};
+		4E8C157D6CB3AD5D98B9E950 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				2C29EF6981347CF028C81953 /* AvatarEditorView.swift */,
+				645DF1CABEE1D81A6C9ABC59 /* OnboardingFlowView.swift */,
+				72F43928ADA43B5792BCE8FD /* PetNamingView.swift */,
+				70F9BE41FCC1DC0574B2839E /* WelcomeView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		5FC761FEBCA537CEAD4A9A3E /* App */ = {
 			isa = PBXGroup;
 			children = (
+				892A43B806FAA1E2284FB0C5 /* AppRouter.swift */,
 				E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */,
 			);
 			path = App;
@@ -143,6 +191,8 @@
 		A4909885F81D48ECC22B677A /* Pet */ = {
 			isa = PBXGroup;
 			children = (
+				FBA6AFD4FCAD360CE923165A /* CreatedPet.swift */,
+				DCBE10FDA835EDB2E4270BF2 /* CreatedPetStore.swift */,
 				CBDC49DB6E431E73EFD0467E /* PetExpression.swift */,
 				AEAD6B1FC746B3AE518EE5D1 /* PetExpressionTestState.swift */,
 				900BE280EC1A045B28B02EDF /* PetLifecycle.swift */,
@@ -170,6 +220,20 @@
 				A4909885F81D48ECC22B677A /* Pet */,
 			);
 			path = Domain;
+			sourceTree = "<group>";
+		};
+		FBDE431F85026364440DF0F9 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				3E019D1363E9B67A2F22C336 /* ARFaceLivePreviewView.swift */,
+				351DDA29984B56D1A39BD81C /* ARKitFaceCaptureService.swift */,
+				78B779D2BE1DF9106ACBA9E5 /* AvatarParameterMapper+Vision.swift */,
+				0400F3672E8465AA40B03CA5 /* CameraPermission.swift */,
+				AF66499A934C9CD7861BC85B /* FaceCaptureCapability.swift */,
+				6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */,
+				0A3C2BD4990A3FA7DCE3266E /* SelfieCaptureView.swift */,
+			);
+			path = Capture;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7CFD2FB8BB4806D395BFB39 /* AvatarConfigurationTests.swift in Sources */,
+				DA4B1CA5EEF6AFC9E99564CF /* CreatedPetStoreTests.swift in Sources */,
 				C079F4B9170AFEEA0A19C081 /* PetExpressionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,9 +336,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE432362624E0786D321EB84 /* ARFaceLivePreviewView.swift in Sources */,
+				8528EFA36652129168244A7C /* ARKitFaceCaptureService.swift in Sources */,
+				54E1DF5725B2E2E14A18C9C2 /* AppRouter.swift in Sources */,
 				24421B10D78C5989582A35A5 /* AvatarColor+UIKit.swift in Sources */,
 				E468A6A9B6DECCF222A8970B /* AvatarConfiguration.swift in Sources */,
 				0241796BC83B3342B84EBAFB /* AvatarConfigurationStore.swift in Sources */,
+				713FA8A8DA2DB7EB6B608581 /* AvatarEditorView.swift in Sources */,
+				E996F1A7B7DA4FA3AB16D1FB /* AvatarParameterMapper+Vision.swift in Sources */,
+				33372781DC9219E46869CAA6 /* AvatarParameterMapper.swift in Sources */,
+				8706BC3AC61BA4F14AB0FD89 /* CameraPermission.swift in Sources */,
+				23190182273B04171CF55D75 /* CreatedPet.swift in Sources */,
+				5C181A77BA59FD9E1A3A3B51 /* CreatedPetStore.swift in Sources */,
+				DEDDBAA6BDF8C980AFFC2A1D /* FaceCaptureCapability.swift in Sources */,
+				2B18131F6BABE3D4DD0FA597 /* LikenessSampler.swift in Sources */,
+				709F48FFE8D13A311A76544D /* OnboardingFlowView.swift in Sources */,
 				10270A1F42E0DA721C12A203 /* PetAnimationController.swift in Sources */,
 				6ADC8BB2289BF7DD2A8FD9E7 /* PetCharacterView.swift in Sources */,
 				CB29330DF05CCE4C7F03EBA0 /* PetExpression.swift in Sources */,
@@ -281,9 +358,12 @@
 				1767E68ECD412DEB39A886B9 /* PetHeadFactory.swift in Sources */,
 				73318AC782D9D2FF2F2E2644 /* PetHomeView.swift in Sources */,
 				B93837AC50DA9D0939AB7E71 /* PetLifecycle.swift in Sources */,
+				539A0BE1E4328567704E4309 /* PetNamingView.swift in Sources */,
 				1B0ED975CD082C5A3A8E601D /* PetNeeds.swift in Sources */,
 				5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */,
+				0EE65459245B209A4665C181 /* SelfieCaptureView.swift in Sources */,
 				4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */,
+				AABDE2AB97FF83E843D191C3 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +509,7 @@
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "TAMA\"LO\"CI";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TAMA\"LO\"CI uses the camera for a short face scan to style your pet avatar. Photos are not kept after setup.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -488,6 +569,7 @@
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "TAMA\"LO\"CI";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TAMA\"LO\"CI uses the camera for a short face scan to style your pet avatar. Photos are not kept after setup.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
