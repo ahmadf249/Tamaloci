@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AvatarEditorView: View {
     @Binding var configuration: AvatarConfiguration
+    var continueTitle: String = "Looks good"
     var onContinue: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var expression: PetExpression = .neutral
@@ -16,6 +17,7 @@ struct AvatarEditorView: View {
             .frame(maxWidth: .infinity)
             .frame(height: 280)
             .padding(.horizontal, 8)
+            .accessibilityLabel("Pet avatar preview")
 
             Form {
                 Section("Likeness (from scan — tweak if needed)") {
@@ -41,7 +43,7 @@ struct AvatarEditorView: View {
             .frame(maxHeight: 320)
 
             Button(action: onContinue) {
-                Text("Looks good")
+                Text(continueTitle)
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
@@ -49,6 +51,7 @@ struct AvatarEditorView: View {
             .buttonStyle(.borderedProminent)
             .padding(.horizontal, 24)
             .padding(.bottom, 20)
+            .accessibilityHint("Saves the avatar look")
         }
         .onChange(of: configuration) { _, newValue in
             configuration = newValue.clamped()

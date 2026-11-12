@@ -17,7 +17,8 @@ enum PetSimulation {
         from: Date,
         to: Date,
         config: SimulationConfig = .default,
-        context: SimulationContext = .empty
+        context: SimulationContext = .empty,
+        careRecency: CareRecency = .empty
     ) -> Snapshot {
         let ageDays = ageDays(birthDate: birthDate, asOf: to)
         let resolvedStage = max(lifeStage, stage(forAgeDays: ageDays, config: config))
@@ -40,11 +41,17 @@ enum PetSimulation {
         var nextState = state
 
         let envFactors = environmentDrainFactors(context: context, asOf: to, config: config)
+        let rhythm = careRhythmFactors(
+            careRecency: careRecency,
+            birthDate: birthDate,
+            asOf: to,
+            config: config
+        )
         let sleepMul = nextState.isSleeping ? config.sleepDrainMultiplier : 1.0
-        nextNeeds.hunger -= config.hungerDrainPerHour * hours * sleepMul
-        nextNeeds.hydration -= config.hydrationDrainPerHour * hours * sleepMul * envFactors.hydration
+        nextNeeds.hunger -= config.hungerDrainPerHour * hours * sleepMul * rhythm.food
+        nextNeeds.hydration -= config.hydrationDrainPerHour * hours * sleepMul * envFactors.hydration * rhythm.water
         nextNeeds.happiness -= config.happinessDrainPerHour * hours * envFactors.happiness
-        nextNeeds.cleanliness -= config.cleanlinessDrainPerHour * hours
+        nextNeeds.cleanliness -= config.cleanlinessDrainPerHour * hours * rhythm.clean
 
         if nextState.isSleeping {
             nextNeeds.energy += config.energyRecoverPerHourSleeping * hours
@@ -113,6 +120,9 @@ enum PetSimulation {
         case .play:
             nextNeeds.happiness += config.playHappinessRecovery
             nextNeeds.energy -= config.playEnergyCost
+            nextNeeds.hunger -= config.playFoodCost
+            nextNeeds.hydration -= config.playWaterCost
+            nextNeeds.cleanliness -= config.playCleanCost
             nextState.isSleeping = false
             nextState.sleepSource = .manual
         case .clean:
@@ -184,6 +194,12 @@ enum PetSimulation {
         var happiness: Double
     }
 
+    private struct CareRhythmFactors {
+        var food: Double
+        var water: Double
+        var clean: Double
+    }
+
     private static func environmentDrainFactors(
         context: SimulationContext,
         asOf date: Date,
@@ -208,6 +224,58 @@ enum PetSimulation {
             happiness = config.coldHappinessDrainMultiplier
         }
         return EnvDrainFactors(hydration: hydration, happiness: happiness)
+    }
+
+    /// Soft human-like care rhythm. Missing last-care uses `birthDate` as the grace anchor.
+    private static func careRhythmFactors(
+        careRecency: CareRecency,
+        birthDate: Date,
+        asOf date: Date,
+        config: SimulationConfig
+    ) -> CareRhythmFactors {
+        CareRhythmFactors(
+            food: intervalMultiplier(
+                lastCare: careRecency.lastFeedAt ?? birthDate,
+                asOf: date,
+                intervalHours: config.foodIntervalHours,
+                overdue: config.overdueFoodDrainMultiplier,
+                config: config
+            ),
+            water: intervalMultiplier(
+                lastCare: careRecency.lastWaterAt ?? birthDate,
+                asOf: date,
+                intervalHours: config.waterIntervalHours,
+                overdue: config.overdueWaterDrainMultiplier,
+                config: config
+            ),
+            clean: intervalMultiplier(
+                lastCare: careRecency.lastCleanAt ?? birthDate,
+                asOf: date,
+                intervalHours: config.cleanIntervalHours,
+                overdue: config.overdueCleanDrainMultiplier,
+                config: config
+            )
+        )
+    }
+
+    private static func intervalMultiplier(
+        lastCare: Date,
+        asOf date: Date,
+        intervalHours: Double,
+        overdue: Double,
+        config: SimulationConfig
+    ) -> Double {
+        guard intervalHours > 0 else { return 1 }
+        let hoursSince = date.timeIntervalSince(lastCare) / 3600.0
+        if hoursSince < 0 { return 1 }
+        if hoursSince >= intervalHours {
+            return overdue
+        }
+        let dueSoonStart = intervalHours * (1 - config.dueSoonFraction)
+        if hoursSince >= dueSoonStart {
+            return config.dueSoonDrainMultiplier
+        }
+        return 1
     }
 
     /// Apply only currently observed charging — does not invent mid-absence unplug times.

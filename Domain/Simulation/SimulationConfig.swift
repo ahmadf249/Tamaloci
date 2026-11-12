@@ -19,6 +19,9 @@ struct SimulationConfig: Equatable, Sendable {
     var waterRecovery: Double
     var playHappinessRecovery: Double
     var playEnergyCost: Double
+    var playFoodCost: Double
+    var playWaterCost: Double
+    var playCleanCost: Double
     var cleanRecovery: Double
     var medicineHealthRecovery: Double
     var medicineClearsIllness: Bool
@@ -53,6 +56,18 @@ struct SimulationConfig: Equatable, Sendable {
     var coldTemperatureCelsius: Double
     var coldHappinessDrainMultiplier: Double
 
+    /// Soft care rhythm — hours between preferred feed / water / clean.
+    var foodIntervalHours: Double
+    var waterIntervalHours: Double
+    var cleanIntervalHours: Double
+    /// Drain multipliers when past the interval without that care.
+    var overdueFoodDrainMultiplier: Double
+    var overdueWaterDrainMultiplier: Double
+    var overdueCleanDrainMultiplier: Double
+    /// Fraction of the interval that counts as “due soon” (milder multiplier).
+    var dueSoonFraction: Double
+    var dueSoonDrainMultiplier: Double
+
     static let `default` = SimulationConfig(
         hungerDrainPerHour: 4,
         hydrationDrainPerHour: 5,
@@ -65,14 +80,18 @@ struct SimulationConfig: Equatable, Sendable {
         waterRecovery: 30,
         playHappinessRecovery: 22,
         playEnergyCost: 10,
+        playFoodCost: 8,
+        playWaterCost: 10,
+        playCleanCost: 6,
         cleanRecovery: 35,
         medicineHealthRecovery: 25,
         medicineClearsIllness: true,
-        criticalThreshold: 25,
-        healthDrainPerHourWhenCritical: 4,
+        // Milder defaults so neglect still matters without feeling instantly punishing (M7 playtest).
+        criticalThreshold: 22,
+        healthDrainPerHourWhenCritical: 3,
         criticalNeedCountForHealthDrain: 2,
         criticalNeedCountForIllness: 2,
-        criticalHealthThreshold: 30,
+        criticalHealthThreshold: 28,
         deathHealthThreshold: 0,
         childAgeDays: 3,
         teenagerAgeDays: 7,
@@ -83,6 +102,14 @@ struct SimulationConfig: Equatable, Sendable {
         hotTemperatureCelsius: 28,
         hotHydrationDrainMultiplier: 1.25,
         coldTemperatureCelsius: 10,
-        coldHappinessDrainMultiplier: 1.15
+        coldHappinessDrainMultiplier: 1.15,
+        foodIntervalHours: 4,
+        waterIntervalHours: 3,
+        cleanIntervalHours: 8,
+        overdueFoodDrainMultiplier: 1.5,
+        overdueWaterDrainMultiplier: 1.55,
+        overdueCleanDrainMultiplier: 1.4,
+        dueSoonFraction: 0.25,
+        dueSoonDrainMultiplier: 1.15
     )
 }

@@ -15,9 +15,11 @@ struct MemorialListView: View {
                     Button("Back") {
                         appModel.showPetHome()
                     }
+                    .accessibilityHint("Returns to pet home or welcome")
                     Spacer()
                     Text("Memorial")
                         .font(.headline.weight(.semibold))
+                        .accessibilityAddTraits(.isHeader)
                     Spacer()
                     Color.clear.frame(width: 44)
                 }
@@ -36,17 +38,23 @@ struct MemorialListView: View {
                     Spacer()
                 } else {
                     List(memorials) { entry in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(entry.name)
-                                .font(.headline)
-                            Text("Passed \(entry.deathDate.formatted(date: .abbreviated, time: .omitted)) · \(entry.ageDays) days")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Text(entry.finalCondition)
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
+                        HStack(spacing: 14) {
+                            AvatarThumbnailView(configuration: entry.avatarConfiguration)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(entry.name)
+                                    .font(.headline)
+                                Text("Passed \(entry.deathDate.formatted(date: .abbreviated, time: .omitted)) · \(entry.ageDays) days")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text(entry.finalCondition.capitalized)
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                            }
+                            Spacer(minLength: 0)
                         }
-                        .padding(.vertical, 4)
+                        .padding(.vertical, 6)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("\(entry.name), passed \(entry.deathDate.formatted(date: .abbreviated, time: .omitted)), lived \(entry.ageDays) days, \(entry.finalCondition)")
                     }
                     .scrollContentBackground(.hidden)
                 }
@@ -62,6 +70,7 @@ struct MemorialListView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .padding(24)
+                    .accessibilityHint("Starts creating a new companion")
                 } else {
                     Button("Back to pet") {
                         appModel.showPetHome()

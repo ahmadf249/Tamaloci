@@ -13,6 +13,7 @@ enum AppRoute: Equatable {
 final class AppModel {
     var route: AppRoute
     let repository: PetRepository
+    var userFacingError: String?
 
     init(repository: PetRepository) {
         self.repository = repository
@@ -35,7 +36,6 @@ final class AppModel {
 
     func showPetHome() {
         repository.refresh()
-        // Explicit navigation: home if alive, otherwise welcome (memorial keeps its own CTA).
         route = repository.hasCompletedOnboarding ? .petHome : .welcome
     }
 
@@ -47,15 +47,16 @@ final class AppModel {
                 createdAt: createdAt,
                 birthDate: createdAt
             )
+            userFacingError = nil
             route = .petHome
         } catch {
+            userFacingError = "Couldn’t save your pet. Please try again."
             #if DEBUG
             print("finishOnboarding failed: \(error)")
             #endif
         }
     }
 
-    /// Apply a tick and route to memorial if the pet died from neglect.
     @discardableResult
     func tickActivePet(
         now: Date = Date(),
@@ -67,6 +68,7 @@ final class AppModel {
             applyTickResult(result)
             return result
         } catch {
+            userFacingError = "Couldn’t update your pet right now."
             #if DEBUG
             print("tick failed: \(error)")
             #endif
@@ -74,7 +76,6 @@ final class AppModel {
         }
     }
 
-    /// Best-effort weather + battery, then tick, then local notification sync.
     @discardableResult
     func refreshDeviceIntegrationsAndTick(now: Date = Date()) async -> PetRepository.TickResult? {
         guard repository.activePet != nil else { return nil }
@@ -153,20 +154,38 @@ final class AppModel {
 
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var appModel: AppModel?
+    @State private var showEphemeralStoreAlert = false
 
     var body: some View {
         Group {
             if let appModel {
                 routedContent(appModel)
+                    .alert("Couldn’t save pet", isPresented: Binding(
+                        get: { appModel.userFacingError != nil },
+                        set: { if !$0 { appModel.userFacingError = nil } }
+                    )) {
+                        Button("OK", role: .cancel) { appModel.userFacingError = nil }
+                    } message: {
+                        Text(appModel.userFacingError ?? "")
+                    }
             } else {
                 ProgressView("Loading…")
                     .task {
                         let repository = PetRepository(modelContext: modelContext)
                         UserDefaultsPetMigrator.migrateIfNeeded(repository: repository)
                         appModel = AppModel(repository: repository)
+                        if AppLaunchDiagnostics.usedInMemoryStore {
+                            showEphemeralStoreAlert = true
+                        }
                     }
             }
+        }
+        .alert("Storage unavailable", isPresented: $showEphemeralStoreAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Your pet may not persist after quit. Try relaunching the app. \(AppLaunchDiagnostics.storeErrorDescription ?? "")")
         }
     }
 
@@ -184,6 +203,6 @@ struct RootView: View {
                 MemorialListView(appModel: appModel)
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: appModel.route)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: appModel.route)
     }
 }

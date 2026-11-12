@@ -9,6 +9,8 @@ final class PetSimulationTests: XCTestCase {
         let start = PetNeeds.neutralDefaults
         let state = PetRuntimeState.activeDefaults
         let t1 = t0.addingTimeInterval(6 * 3600)
+        // Care anchored at `to` so rhythm multipliers stay 1.0 for baseline drain math.
+        let freshCare = CareRecency(lastFeedAt: t1, lastWaterAt: t1, lastCleanAt: t1)
         let result = PetSimulation.advance(
             needs: start,
             state: state,
@@ -16,7 +18,8 @@ final class PetSimulationTests: XCTestCase {
             birthDate: t0,
             from: t0,
             to: t1,
-            config: config
+            config: config,
+            careRecency: freshCare
         )
 
         XCTAssertLessThan(result.needs.hunger, start.hunger)
@@ -56,15 +59,21 @@ final class PetSimulationTests: XCTestCase {
         XCTAssertEqual(result.needs.hunger, min(100, 20 + config.feedRecovery), accuracy: 0.01)
     }
 
-    func testPlayRaisesHappinessAndCostsEnergy() {
+    func testPlayRaisesHappinessAndCostsEnergyFoodWaterClean() {
         var needs = PetNeeds.neutralDefaults
         needs.happiness = 40
         needs.energy = 50
+        needs.hunger = 80
+        needs.hydration = 80
+        needs.cleanliness = 80
         let result = PetSimulation.applyCare(
             .play, needs: needs, state: .activeDefaults, lifeStage: .baby, at: t0, config: config
         )
         XCTAssertEqual(result.needs.happiness, min(100, 40 + config.playHappinessRecovery), accuracy: 0.01)
         XCTAssertEqual(result.needs.energy, max(0, 50 - config.playEnergyCost), accuracy: 0.01)
+        XCTAssertEqual(result.needs.hunger, max(0, 80 - config.playFoodCost), accuracy: 0.01)
+        XCTAssertEqual(result.needs.hydration, max(0, 80 - config.playWaterCost), accuracy: 0.01)
+        XCTAssertEqual(result.needs.cleanliness, max(0, 80 - config.playCleanCost), accuracy: 0.01)
         XCTAssertFalse(result.state.isSleeping)
     }
 
@@ -273,5 +282,43 @@ final class PetSimulationTests: XCTestCase {
         XCTAssertTrue(result.state.isSleeping)
         XCTAssertEqual(result.state.sleepSource, .manual)
         XCTAssertLessThan(result.needs.energy, config.autoWakeEnergyThreshold)
+    }
+
+    func testOverdueFoodIntervalIncreasesFoodDrain() {
+        let birth = t0.addingTimeInterval(-24 * 3600)
+        let recentFeed = CareRecency(lastFeedAt: t0, lastWaterAt: t0, lastCleanAt: t0)
+        let overdueFeed = CareRecency(
+            lastFeedAt: t0.addingTimeInterval(-10 * 3600),
+            lastWaterAt: t0,
+            lastCleanAt: t0
+        )
+        let t1 = t0.addingTimeInterval(2 * 3600)
+        let fresh = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: birth,
+            from: t0, to: t1, config: config, careRecency: recentFeed
+        )
+        let overdue = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: birth,
+            from: t0, to: t1, config: config, careRecency: overdueFeed
+        )
+        XCTAssertLessThan(overdue.needs.hunger, fresh.needs.hunger)
+    }
+
+    func testMissingCareUsesBirthDateGraceNotInstantOverdue() {
+        let birth = t0
+        let t1 = t0.addingTimeInterval(1 * 3600)
+        let withEmpty = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: birth,
+            from: t0, to: t1, config: config, careRecency: .empty
+        )
+        let withBirthAsFeed = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: birth,
+            from: t0, to: t1, config: config,
+            careRecency: CareRecency(lastFeedAt: birth, lastWaterAt: birth, lastCleanAt: birth)
+        )
+        XCTAssertEqual(withEmpty.needs.hunger, withBirthAsFeed.needs.hunger, accuracy: 0.01)
+        // Still within foodIntervalHours from birth — not overdue multiplier.
+        let expected = PetNeeds.neutralDefaults.hunger - config.hungerDrainPerHour * 1
+        XCTAssertEqual(withEmpty.needs.hunger, expected, accuracy: 0.01)
     }
 }

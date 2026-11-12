@@ -6,128 +6,10 @@
 	<integer>12</integer>
 	<key>logs</key>
 	<dict>
-		<key>2A3EE9DD-5BC7-452A-BBA3-ED458084D8C8</key>
+		<key>9D189913-CDE6-4E7F-B3D0-1AB73AA65093</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>EB29FAA3-90C5-4B34-BC13-09B3B07A67F3</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>0</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>3</integer>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.unit.cocoaUnitTest</string>
-			<key>fileName</key>
-			<string>Run-Tamaloci-2026.11.12_09-02-33-+0700.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>0</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>5</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>Tamaloci project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>Tamaloci</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run Tamaloci</string>
-			<key>timeStartedRecording</key>
-			<real>816141753.74412596</real>
-			<key>timeStoppedRecording</key>
-			<real>816141758.60372305</real>
-			<key>title</key>
-			<string>Run Tamaloci</string>
-			<key>uniqueIdentifier</key>
-			<string>2A3EE9DD-5BC7-452A-BBA3-ED458084D8C8</string>
-		</dict>
-		<key>37FDCD55-57B9-454D-B0F1-9C5E5A32EF72</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>74114987-F28B-47B5-B0D3-814B28123890</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>E</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>1</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.unit.cocoaUnitTest</string>
-			<key>fileName</key>
-			<string>Run-Tamaloci-2026.11.12_08-54-17-+0700.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>E</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>3</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>Tamaloci project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>Tamaloci</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run Tamaloci</string>
-			<key>timeStartedRecording</key>
-			<real>816141257.27047801</real>
-			<key>timeStoppedRecording</key>
-			<real>816141259.78004599</real>
-			<key>title</key>
-			<string>Run Tamaloci</string>
-			<key>uniqueIdentifier</key>
-			<string>37FDCD55-57B9-454D-B0F1-9C5E5A32EF72</string>
-		</dict>
-		<key>BB1CFDF2-5EA6-4109-A11D-2D39C03CB305</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>7AE07877-4BCB-4E47-A412-1C7D52A1CC3E</string>
+			<string>E7DD3992-6B9A-4EB2-B120-C3D188887962</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -148,7 +30,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.unit.cocoaUnitTest</string>
 			<key>fileName</key>
-			<string>Run-Tamaloci-2026.11.12_08-54-38-+0700.xcresult</string>
+			<string>Run-Tamaloci-2026.11.12_09-44-36-+0700.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasPrimaryLog</key>
@@ -175,13 +57,13 @@
 			<key>signature</key>
 			<string>Run Tamaloci</string>
 			<key>timeStartedRecording</key>
-			<real>816141278.39755702</real>
+			<real>816144276.68079197</real>
 			<key>timeStoppedRecording</key>
-			<real>816141280.80372202</real>
+			<real>816144298.51878297</real>
 			<key>title</key>
 			<string>Run Tamaloci</string>
 			<key>uniqueIdentifier</key>
-			<string>BB1CFDF2-5EA6-4109-A11D-2D39C03CB305</string>
+			<string>9D189913-CDE6-4E7F-B3D0-1AB73AA65093</string>
 		</dict>
 	</dict>
 </dict>

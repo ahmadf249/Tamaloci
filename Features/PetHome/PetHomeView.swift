@@ -5,9 +5,19 @@ struct PetHomeView: View {
     @Bindable var appModel: AppModel
     @State private var expression: PetExpression = .neutral
     @State private var characterViewID = UUID()
+    @State private var lastAvatarConfiguration: AvatarConfiguration?
     @State private var showDebugHUD = false
+    @State private var showSettings = false
+    @State private var showAvatarEditor = false
+    @State private var editingConfiguration = AvatarConfiguration.default
     @State private var carePulse = false
     @State private var statusMessage: String?
+    @State private var careFXVisual: CareFXVisual?
+    @State private var careFXToken = UUID()
+    @State private var lifeOffsetY: CGFloat = 0
+    @State private var lifeScale: CGFloat = 1
+    @State private var lifeRotation: Double = 0
+    @State private var expressionRestoreTask: DispatchWorkItem?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
 
@@ -30,10 +40,19 @@ struct PetHomeView: View {
             background
             VStack(spacing: 0) {
                 HStack {
-                    Button("Memorial") {
-                        appModel.showMemorial()
+                    Menu {
+                        Button("Settings") { showSettings = true }
+                        Button("Edit look") {
+                            editingConfiguration = avatarConfiguration
+                            showAvatarEditor = true
+                        }
+                        Button("Memorial") { appModel.showMemorial() }
+                    } label: {
+                        Text("Menu")
+                            .font(.caption.weight(.semibold))
                     }
-                    .font(.caption.weight(.semibold))
+                    .accessibilityLabel("Menu")
+                    .accessibilityHint("Settings, edit look, or memorial")
                     Spacer()
                 }
                 .padding(.horizontal, 16)
@@ -53,17 +72,20 @@ struct PetHomeView: View {
                 Text(pet.map(\.name) ?? "Your pet")
                     .font(.title3.weight(.semibold))
                     .padding(.top, 4)
+                    .accessibilityAddTraits(.isHeader)
 
                 if let pet {
                     Text("\(pet.lifeStage.displayName) · \(ageLabel(pet.ageDays))")
                         .font(.footnote.weight(.medium))
                         .foregroundStyle(.secondary)
                         .padding(.top, 2)
+                        .accessibilityLabel("\(pet.lifeStage.displayName), \(ageLabel(pet.ageDays)) old")
                 }
 
                 statusBanner
                     .padding(.horizontal, 16)
                     .padding(.bottom, 4)
+                    .accessibilityElement(children: .combine)
 
                 ZStack {
                     PetCharacterView(
@@ -72,8 +94,11 @@ struct PetHomeView: View {
                         reduceMotion: reduceMotion
                     )
                     .id(characterViewID)
-                    .scaleEffect(carePulse ? 1.06 : 1.0)
+                    .offset(y: lifeOffsetY)
+                    .scaleEffect(lifeScale * (carePulse ? 1.06 : 1.0))
+                    .rotationEffect(.degrees(lifeRotation))
                     .opacity(carePulse ? 0.92 : 1.0)
+                    .accessibilityLabel("Pet avatar, \(expression.displayName) expression")
 
                     if carePulse {
                         Circle()
@@ -82,15 +107,33 @@ struct PetHomeView: View {
                             .scaleEffect(carePulse ? 1.25 : 0.85)
                             .opacity(carePulse ? 0 : 0.7)
                             .allowsHitTesting(false)
+                            .accessibilityHidden(true)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal, 8)
+                .overlay {
+                    if let careFXVisual {
+                        CareFXBurstView(
+                            visual: careFXVisual,
+                            reduceMotion: reduceMotion
+                        ) {
+                            self.careFXVisual = nil
+                        }
+                        .id(careFXToken)
+                    }
+                }
 
                 if let pet {
                     NeedsMetersView(needs: pet.needs)
                         .padding(.horizontal, 16)
+                    Text("High bars = healthy needs")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
                         .padding(.bottom, 8)
+                        .accessibilityHidden(true)
 
                     CareControlsView(
                         isSleeping: pet.state.isSleeping,
@@ -110,14 +153,37 @@ struct PetHomeView: View {
                 }
             }
         }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
+        .sheet(isPresented: $showAvatarEditor) {
+            NavigationStack {
+                AvatarEditorView(
+                    configuration: $editingConfiguration,
+                    continueTitle: "Save look"
+                ) {
+                    saveEditedAvatar()
+                }
+                .navigationTitle("Edit look")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { showAvatarEditor = false }
+                    }
+                }
+            }
+        }
         .onAppear {
-            characterViewID = UUID()
+            remountHeadIfAvatarChanged()
             Task { await runDeviceTickAndSyncExpression() }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task { await runDeviceTickAndSyncExpression() }
             }
+        }
+        .onChange(of: avatarConfiguration) { _, _ in
+            remountHeadIfAvatarChanged()
         }
     }
 
@@ -131,6 +197,7 @@ struct PetHomeView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
                     .background(Color(red: 0.95, green: 0.82, blue: 0.80).opacity(0.9), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .accessibilityLabel("Needs medicine, feeling ill")
             } else if pet.needs.health <= config.criticalHealthThreshold {
                 Text("Health is low — care soon")
                     .font(.footnote.weight(.semibold))
@@ -138,16 +205,26 @@ struct PetHomeView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
                     .background(Color(red: 0.96, green: 0.88, blue: 0.72).opacity(0.95), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-            } else if let statusMessage {
-                Text(statusMessage)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Health is low, care soon")
             } else if pet.state.isSleeping {
                 Text("Sleeping — energy recovering")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                    .accessibilityLabel("Sleeping, energy recovering")
+            } else if pet.needs.energy <= config.criticalThreshold {
+                Text("Low energy — Sleep to recover")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.25, green: 0.35, blue: 0.55))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
+                    .background(Color(red: 0.86, green: 0.90, blue: 0.96).opacity(0.95), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .accessibilityLabel("Low energy, sleep to recover")
+            } else if let statusMessage {
+                Text(statusMessage)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             } else {
-                Text("Your stylized companion — saved on device.")
+                Text("High bars = healthy needs. Feed fills Food.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -175,11 +252,30 @@ struct PetHomeView: View {
             endPoint: .bottomTrailing
         )
         .ignoresSafeArea()
-        .animation(.easeInOut(duration: 0.35), value: isIllOrCritical)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: isIllOrCritical)
     }
 
     private func ageLabel(_ days: Int) -> String {
         days == 1 ? "1 day" : "\(days) days"
+    }
+
+    private func remountHeadIfAvatarChanged() {
+        let current = avatarConfiguration
+        if lastAvatarConfiguration != current {
+            lastAvatarConfiguration = current
+            characterViewID = UUID()
+        }
+    }
+
+    private func saveEditedAvatar() {
+        do {
+            try appModel.repository.updateAvatar(editingConfiguration.clamped())
+            remountHeadIfAvatarChanged()
+            showAvatarEditor = false
+            statusMessage = "Look saved"
+        } catch {
+            appModel.userFacingError = "Couldn’t save the new look."
+        }
     }
 
     private func runDeviceTickAndSyncExpression() async {
@@ -205,9 +301,8 @@ struct PetHomeView: View {
             appModel.applyTickResult(result)
             if case .deceased = result { return }
             Task { await CareNotificationScheduler.shared.sync(pet: appModel.repository.activePet) }
-            syncExpressionFromPet()
             statusMessage = "\(type.displayName) ✓"
-            triggerCareFeedback()
+            triggerCareFeedback(for: type)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
                 if statusMessage?.hasPrefix(type.displayName) == true {
                     statusMessage = nil
@@ -218,17 +313,81 @@ struct PetHomeView: View {
         }
     }
 
-    private func triggerCareFeedback() {
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.impactOccurred()
-        guard !reduceMotion else { return }
-        withAnimation(.easeOut(duration: 0.18)) {
-            carePulse = true
+    private func triggerCareFeedback(for type: CareEventType) {
+        CareSoundPlayer.playCareSuccessIfEnabled()
+        if AppPreferences.hapticsEnabled {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
-            withAnimation(.easeIn(duration: 0.28)) {
-                carePulse = false
+
+        if let visual = CareFXCatalog.visual(for: type) {
+            careFXToken = UUID()
+            careFXVisual = visual
+        }
+
+        expressionRestoreTask?.cancel()
+        expression = CareFXCatalog.flashExpression(for: type)
+        let restore = DispatchWorkItem {
+            syncExpressionFromPet()
+        }
+        expressionRestoreTask = restore
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7, execute: restore)
+
+        // Soft glow pulse for medicine always; for others when motion allowed.
+        let shouldPulse = type == .medicine || !reduceMotion
+        if shouldPulse {
+            withAnimation(.easeOut(duration: 0.18)) {
+                carePulse = true
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
+                withAnimation(.easeIn(duration: 0.28)) {
+                    carePulse = false
+                }
+            }
+        }
+
+        guard !reduceMotion else { return }
+        playLifeMotion(for: type)
+    }
+
+    private func playLifeMotion(for type: CareEventType) {
+        lifeOffsetY = 0
+        lifeScale = 1
+        lifeRotation = 0
+        switch type {
+        case .feed, .water:
+            withAnimation(.easeInOut(duration: 0.12)) { lifeOffsetY = 8 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+                withAnimation(.easeInOut(duration: 0.12)) { lifeOffsetY = -4 }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.24) {
+                withAnimation(.easeInOut(duration: 0.12)) { lifeOffsetY = 6 }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) {
+                withAnimation(.easeOut(duration: 0.14)) { lifeOffsetY = 0 }
+            }
+        case .play:
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.45)) {
+                lifeScale = 1.1
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.65)) {
+                    lifeScale = 1
+                }
+            }
+        case .clean:
+            withAnimation(.easeInOut(duration: 0.06)) { lifeRotation = -6 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+                withAnimation(.easeInOut(duration: 0.06)) { lifeRotation = 6 }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+                withAnimation(.easeInOut(duration: 0.06)) { lifeRotation = -4 }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
+                withAnimation(.easeOut(duration: 0.08)) { lifeRotation = 0 }
+            }
+        case .medicine, .sleep, .wake:
+            break
         }
     }
 
@@ -288,13 +447,17 @@ private struct NeedsMetersView: View {
 
     private var rows: [(String, Double)] {
         [
-            ("Hunger", needs.hunger),
-            ("Hydration", needs.hydration),
+            ("Food", needs.hunger),
+            ("Water", needs.hydration),
             ("Happy", needs.happiness),
             ("Health", needs.health),
             ("Clean", needs.cleanliness),
             ("Energy", needs.energy)
         ]
+    }
+
+    private var summary: String {
+        rows.map { "\($0.0) \(Int($0.1.rounded())) percent" }.joined(separator: ", ")
     }
 
     var body: some View {
@@ -319,9 +482,13 @@ private struct NeedsMetersView: View {
                         .foregroundStyle(.secondary)
                         .frame(width: 36, alignment: .trailing)
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(label) \(Int(value.rounded())) percent")
             }
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Need meters. High bars mean healthy needs.")
+        .accessibilityValue(summary)
     }
 
     private func meterColor(_ value: Double) -> Color {
@@ -364,7 +531,23 @@ private struct CareControlsView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(tint(for: type))
+                .accessibilityLabel(type.displayName)
+                .accessibilityHint(hint(for: type))
             }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Care actions")
+    }
+
+    private func hint(for type: CareEventType) -> String {
+        switch type {
+        case .feed: return "Fills Food bar"
+        case .water: return "Fills Water bar"
+        case .play: return "Fun but tiring — uses Energy, Food, Water, Clean"
+        case .clean: return "Fills Clean bar"
+        case .medicine: return "Raises health and clears illness"
+        case .sleep: return "Recovers Energy while sleeping"
+        case .wake: return "Wakes the pet"
         }
     }
 

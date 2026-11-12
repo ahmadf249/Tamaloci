@@ -111,6 +111,7 @@ final class PetRepository {
         let needs = pet.needs?.asDomain ?? .neutralDefaults
         let state = pet.state?.asDomain ?? .activeDefaults
         let from = state.lastUpdatedAt
+        let careRecency = careRecency(from: pet)
         let snapshot = PetSimulation.advance(
             needs: needs,
             state: state,
@@ -119,7 +120,8 @@ final class PetRepository {
             from: from,
             to: now,
             config: config,
-            context: context
+            context: context,
+            careRecency: careRecency
         )
 
         if snapshot.state.lifecycleStatus == .deceased {
@@ -199,6 +201,31 @@ final class PetRepository {
             timestamp: event.timestamp,
             note: event.note
         )
+    }
+
+    private func careRecency(from pet: SDPet) -> CareRecency {
+        var lastFeed: Date?
+        var lastWater: Date?
+        var lastClean: Date?
+        for event in pet.careEvents {
+            switch event.type {
+            case .feed:
+                if lastFeed == nil || event.timestamp > lastFeed! {
+                    lastFeed = event.timestamp
+                }
+            case .water:
+                if lastWater == nil || event.timestamp > lastWater! {
+                    lastWater = event.timestamp
+                }
+            case .clean:
+                if lastClean == nil || event.timestamp > lastClean! {
+                    lastClean = event.timestamp
+                }
+            default:
+                break
+            }
+        }
+        return CareRecency(lastFeedAt: lastFeed, lastWaterAt: lastWater, lastCleanAt: lastClean)
     }
 
     func careEvents(for petID: UUID) throws -> [CareEventRecord] {

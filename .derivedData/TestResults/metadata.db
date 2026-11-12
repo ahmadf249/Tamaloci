@@ -8,27 +8,63 @@
 	<dict>
 		<key>TamalociTests</key>
 		<dict>
+			<key>AppPreferencesTests</key>
+			<dict>
+				<key>testCanDisablePrefs</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.0046160221099853516</real>
+				</dict>
+				<key>testDefaultsAreEnabled</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00063192844390869141</real>
+				</dict>
+			</dict>
 			<key>AvatarConfigurationTests</key>
 			<dict>
 				<key>testCodableRoundTripIncludesLikenessFields</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0028669834136962891</real>
+					<real>0.0032479763031005859</real>
 				</dict>
 				<key>testLegacyDecodeFillsNewMorphDefaults</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.001073002815246582</real>
+					<real>0.0015389919281005859</real>
 				</dict>
 				<key>testMapperAppliesHairAndIris</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00074005126953125</real>
+					<real>0.000514984130859375</real>
 				</dict>
 				<key>testStoreSaveRestoreRoundTrip</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0035800933837890625</real>
+					<real>0.0036789178848266602</real>
+				</dict>
+			</dict>
+			<key>CareFXCatalogTests</key>
+			<dict>
+				<key>testFlashExpressions</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.0038279294967651367</real>
+				</dict>
+				<key>testIconPoolsNonEmptyForPrimaryCare</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00056993961334228516</real>
+				</dict>
+				<key>testRandomPickBelongsToPool</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00065600872039794922</real>
+				</dict>
+				<key>testSleepWakeUseSystemVisuals</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.000492095947265625</real>
 				</dict>
 			</dict>
 			<key>CreatedPetStoreTests</key>
@@ -36,12 +72,30 @@
 				<key>testEmptyNameDoesNotCountAsCompleted</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00046503543853759766</real>
+					<real>0.0029109716415405273</real>
 				</dict>
 				<key>testSaveRestoreRoundTrip</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0052820444107055664</real>
+					<real>0.0053240060806274414</real>
+				</dict>
+			</dict>
+			<key>DeviceFallbackTests</key>
+			<dict>
+				<key>testCareNotificationsPrefOffIsReadable</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.0017999410629272461</real>
+				</dict>
+				<key>testNilWeatherContextMatchesEmptyContext</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00082802772521972656</real>
+				</dict>
+				<key>testUnknownBatteryDoesNotOverrideManualSleep</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00048303604125976562</real>
 				</dict>
 			</dict>
 			<key>PetExpressionTests</key>
@@ -49,22 +103,22 @@
 				<key>testDisplayNamesAreNonEmpty</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00062501430511474609</real>
+					<real>0.00052499771118164062</real>
 				</dict>
 				<key>testExpressionTestStateDrivesSuppliedExpression</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00057899951934814453</real>
+					<real>0.00047504901885986328</real>
 				</dict>
 				<key>testNeedsStubDefaultsAreInValidRange</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00056898593902587891</real>
+					<real>0.00042402744293212891</real>
 				</dict>
 				<key>testRequiredExpressionsMatchSpec</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00045597553253173828</real>
+					<real>0.00040209293365478516</real>
 				</dict>
 			</dict>
 			<key>PetRepositoryTests</key>
@@ -72,52 +126,52 @@
 				<key>testCareEventPersists</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.018783092498779297</real>
+					<real>0.019456028938293457</real>
 				</dict>
 				<key>testCreateAndFetchActivePet</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0045160055160522461</real>
+					<real>0.0044569969177246094</real>
 				</dict>
 				<key>testMarkDeceasedCreatesMemorialAndClearsActive</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0080400705337524414</real>
+					<real>0.0071139335632324219</real>
 				</dict>
 				<key>testPerformCareFeedPersistsAndAppendsEvent</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.011379003524780273</real>
+					<real>0.0096679925918579102</real>
 				</dict>
 				<key>testTickAdvancesNeedsFromLastUpdatedAt</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0077229738235473633</real>
+					<real>0.0074210166931152344</real>
 				</dict>
 				<key>testTickMemorialisesWhenHealthReachesZero</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0083180665969848633</real>
+					<real>0.0083869695663452148</real>
 				</dict>
 				<key>testTickPersistsLifeStageFromAge</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0069119930267333984</real>
+					<real>0.006550908088684082</real>
 				</dict>
 				<key>testTickWithChargingContextSetsSleepSource</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0083049535751342773</real>
+					<real>0.0075390338897705078</real>
 				</dict>
 				<key>testUpsertEnvironmentSnapshotKeepsLatestOnly</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0094289779663085938</real>
+					<real>0.0089828968048095703</real>
 				</dict>
 				<key>testUserDefaultsMigrationCreatesActivePet</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0082129240036010742</real>
+					<real>0.0083079338073730469</real>
 				</dict>
 			</dict>
 			<key>PetSimulationTests</key>
@@ -130,97 +184,112 @@
 				<key>testAdvanceSetsDeceasedWhenHealthReachesZero</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00064194202423095703</real>
+					<real>0.00066804885864257812</real>
 				</dict>
 				<key>testAdvanceSixHoursDrainsNeeds</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00050604343414306641</real>
+					<real>0.00043404102325439453</real>
 				</dict>
 				<key>testAutoSleepWhenEnergyDepletes</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00042700767517089844</real>
+					<real>0.00043201446533203125</real>
 				</dict>
 				<key>testAutoWakeWhenEnergyRecoversWhileSleeping</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00041890144348144531</real>
+					<real>0.00041508674621582031</real>
 				</dict>
 				<key>testCareDoesNotSetDeceased</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00053894519805908203</real>
+					<real>0.00038492679595947266</real>
 				</dict>
 				<key>testChargingForcesSleep</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00055801868438720703</real>
+					<real>0.00051903724670410156</real>
 				</dict>
 				<key>testColdWeatherIncreasesHappinessDrain</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00060093402862548828</real>
+					<real>0.00045192241668701172</real>
 				</dict>
 				<key>testCriticalNeedsCauseIllnessAndHealthDrain</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0005779266357421875</real>
+					<real>0.00073003768920898438</real>
 				</dict>
 				<key>testFeedRecoversHunger</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00096499919891357422</real>
+					<real>0.00041496753692626953</real>
 				</dict>
 				<key>testHotWeatherIncreasesHydrationDrain</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00046098232269287109</real>
+					<real>0.00046300888061523438</real>
 				</dict>
 				<key>testLifeStageAdvancesWithAgeDays</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00044107437133789062</real>
+					<real>0.00045895576477050781</real>
 				</dict>
 				<key>testManualSleepSurvivesUnplugWhenEnergyStillLow</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0004119873046875</real>
+					<real>0.0014719963073730469</real>
 				</dict>
 				<key>testMedicineClearsIllnessAndBoostsHealth</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0004520416259765625</real>
+					<real>0.00050401687622070312</real>
+				</dict>
+				<key>testMissingCareUsesBirthDateGraceNotInstantOverdue</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00047206878662109375</real>
+				</dict>
+				<key>testOverdueFoodIntervalIncreasesFoodDrain</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00048100948333740234</real>
 				</dict>
 				<key>testPlayRaisesHappinessAndCostsEnergy</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0044579505920410156</real>
+					<real>0.00043594837188720703</real>
+				</dict>
+				<key>testPlayRaisesHappinessAndCostsEnergyFoodWaterClean</key>
+				<dict>
+					<key>mrnet</key>
+					<real>0.00049901008605957031</real>
 				</dict>
 				<key>testSleepRecoversEnergyAndSlowsHungerDrain</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00047099590301513672</real>
+					<real>0.00050604343414306641</real>
 				</dict>
 				<key>testStaleEnvironmentIsIgnored</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00053000450134277344</real>
+					<real>0.00050103664398193359</real>
 				</dict>
 				<key>testSuggestedExpressionForDeceased</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00052702426910400391</real>
+					<real>0.00040197372436523438</real>
 				</dict>
 				<key>testSuggestedExpressionForHungry</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.00051295757293701172</real>
+					<real>0.00047397613525390625</real>
 				</dict>
 				<key>testUnplugLeavesChargingSleep</key>
 				<dict>
 					<key>mrnet</key>
-					<real>0.0034430027008056641</real>
+					<real>0.0003910064697265625</real>
 				</dict>
 			</dict>
 		</dict>

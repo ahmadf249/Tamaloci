@@ -13,21 +13,27 @@ final class CareNotificationScheduler {
     private var didRequestAuth = false
 
     func requestAuthorizationIfNeeded() async {
+        guard AppPreferences.careNotificationsEnabled else { return }
         guard !didRequestAuth else { return }
         didRequestAuth = true
         _ = try? await center.requestAuthorization(options: [.alert, .sound, .badge])
     }
 
     func sync(pet: PetRecord?, config: SimulationConfig = .default) async {
+        guard AppPreferences.careNotificationsEnabled else {
+            cancelAllCareReminders()
+            return
+        }
+
         await requestAuthorizationIfNeeded()
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else {
-            await cancelAllCareReminders()
+            cancelAllCareReminders()
             return
         }
 
         guard let pet, pet.state.lifecycleStatus == .active else {
-            await cancelAllCareReminders()
+            cancelAllCareReminders()
             return
         }
 
@@ -39,7 +45,7 @@ final class CareNotificationScheduler {
                 afterSeconds: 60 * 30
             )
         } else {
-            await center.removePendingNotificationRequests(withIdentifiers: [criticalID])
+            center.removePendingNotificationRequests(withIdentifiers: [criticalID])
         }
 
         if pet.needs.hunger <= config.criticalThreshold {
@@ -50,7 +56,7 @@ final class CareNotificationScheduler {
                 afterSeconds: 60 * 45
             )
         } else {
-            await center.removePendingNotificationRequests(withIdentifiers: [hungerID])
+            center.removePendingNotificationRequests(withIdentifiers: [hungerID])
         }
 
         if pet.state.isIll {
@@ -61,11 +67,11 @@ final class CareNotificationScheduler {
                 afterSeconds: 60 * 20
             )
         } else {
-            await center.removePendingNotificationRequests(withIdentifiers: [illID])
+            center.removePendingNotificationRequests(withIdentifiers: [illID])
         }
     }
 
-    private func cancelAllCareReminders() async {
+    private func cancelAllCareReminders() {
         center.removePendingNotificationRequests(withIdentifiers: [criticalID, hungerID, illID])
     }
 
@@ -74,7 +80,7 @@ final class CareNotificationScheduler {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        content.sound = .default
+        content.sound = AppPreferences.soundEnabled ? .default : nil
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(afterSeconds, 5), repeats: false)
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         try? await center.add(request)
