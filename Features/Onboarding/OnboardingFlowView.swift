@@ -178,13 +178,11 @@ struct OnboardingFlowView: View {
     private func finish() {
         let trimmed = petName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
-        let pet = CreatedPet(
-            name: String(trimmed.prefix(24)),
-            avatarConfiguration: configuration.clamped(),
-            createdAt: Date()
-        )
         arkitService.tearDown()
-        appModel.finishOnboarding(pet: pet)
+        appModel.finishOnboarding(
+            name: String(trimmed.prefix(24)),
+            avatarConfiguration: configuration.clamped()
+        )
     }
 
     private var background: some View {

@@ -7,7 +7,7 @@ Native iOS virtual-pet game. Offline-first Tamagotchi-style care with a stylized
 
 ## Active focus
 
-**M2 — Pet creation** complete. Next: first **M3** slice (SwiftData persistent pet) when written in private docs.
+**M3 — Persistent pet** complete. Next: first **M4** slice (simulation engine) when written in private docs. Authored mesh polish is optional and non-blocking.
 
 Product roadmap, requirements PDF, asset policy, and runbook live in a local `docs/` folder that is **not published** with this repository. Keep your private copy nearby when developing.
 
@@ -16,7 +16,14 @@ Product roadmap, requirements PDF, asset policy, and runbook live in a local `do
 | M0 — Prototype (floating head + expression HUD) | Done |
 | M1 — Avatar system | Done |
 | M2 — Pet creation | Done |
-| M3+ | Tracked in local private docs |
+| M3 — Persistent pet | Done |
+| M4+ | Tracked in local private docs |
+
+## M3 shipped (persistence)
+
+- SwiftData models: Pet, Needs, State, CareEvent, Memorial, EnvironmentSnapshot
+- `PetRepository` + one-shot UserDefaults → SwiftData migration
+- Kill/relaunch keeps active pet; minimal Memorial list + DEBUG mark deceased / append care
 
 ## M2 shipped (pet creation)
 

@@ -19,6 +19,7 @@ targets:
       - path: Features
       - path: Rendering
       - path: Domain
+      - path: Persistence
       - path: Resources/Assets.xcassets
       - path: Resources/3D
         buildPhase: resources

@@ -1,7 +1,7 @@
 import Foundation
 
-/// Stub for PDF §7.3 — Phase I does not simulate needs yet.
-struct PetNeeds: Equatable, Sendable {
+/// Need meters — persisted in M3; simulated in M4.
+struct PetNeeds: Equatable, Codable, Sendable {
     var hunger: Double
     var hydration: Double
     var happiness: Double

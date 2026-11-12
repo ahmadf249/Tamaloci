@@ -9,7 +9,7 @@ struct PetHomeView: View {
 
     private let brandTitle = "TAMA\"LO\"CI"
 
-    private var pet: CreatedPet? { appModel.petStore.pet }
+    private var pet: PetRecord? { appModel.repository.activePet }
 
     private var avatarConfiguration: AvatarConfiguration {
         pet?.avatarConfiguration ?? .default
@@ -19,23 +19,32 @@ struct PetHomeView: View {
         ZStack {
             background
             VStack(spacing: 0) {
+                HStack {
+                    Button("Memorial") {
+                        appModel.showMemorial()
+                    }
+                    .font(.caption.weight(.semibold))
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+
                 Text(brandTitle)
                     .font(.system(size: 34, weight: .heavy, design: .rounded))
                     .tracking(2)
                     .foregroundStyle(.primary)
                     .accessibilityAddTraits(.isHeader)
-                    .padding(.top, 12)
                     .onLongPressGesture(minimumDuration: 1.2) {
                         #if DEBUG
                         showDebugHUD.toggle()
                         #endif
                     }
 
-                Text(pet.map { "\($0.name)" } ?? "Your pet")
+                Text(pet.map(\.name) ?? "Your pet")
                     .font(.title3.weight(.semibold))
                     .padding(.top, 4)
 
-                Text("Your stylized companion — camera is off.")
+                Text("Your stylized companion — saved on device.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .padding(.bottom, 8)
@@ -59,7 +68,7 @@ struct PetHomeView: View {
             }
         }
         .onAppear {
-            _ = appModel.petStore.restore()
+            appModel.repository.refresh()
             characterViewID = UUID()
         }
     }
@@ -87,7 +96,7 @@ struct PetHomeView: View {
     #if DEBUG
     private var debugPanel: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("DEBUG · expressions")
+            Text("DEBUG · expressions / persistence")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
 
@@ -109,8 +118,16 @@ struct PetHomeView: View {
                 }
             }
 
-            Button("Reset onboarding") {
-                appModel.resetOnboardingForDebug()
+            HStack {
+                Button("Append care") {
+                    appModel.appendDebugCareEvent()
+                }
+                Button("Mark deceased") {
+                    appModel.markDeceasedForDebug()
+                }
+                Button("Reset all") {
+                    appModel.resetOnboardingForDebug()
+                }
             }
             .font(.caption.weight(.semibold))
         }
@@ -120,8 +137,4 @@ struct PetHomeView: View {
     #else
     private var debugPanel: some View { EmptyView() }
     #endif
-}
-
-#Preview {
-    PetHomeView(appModel: AppModel())
 }

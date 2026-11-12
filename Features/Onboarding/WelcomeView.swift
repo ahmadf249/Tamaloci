@@ -40,8 +40,19 @@ struct WelcomeView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal, 28)
-                .padding(.bottom, 40)
+
+                if !appModel.repository.memorials.isEmpty {
+                    Button("View memorial") {
+                        appModel.showMemorial()
+                    }
+                    .padding(.bottom, 8)
+                }
+
+                Spacer().frame(height: 24)
             }
+        }
+        .onAppear {
+            appModel.repository.refresh()
         }
     }
 
@@ -57,8 +68,4 @@ struct WelcomeView: View {
         )
         .ignoresSafeArea()
     }
-}
-
-#Preview {
-    WelcomeView(appModel: AppModel())
 }
