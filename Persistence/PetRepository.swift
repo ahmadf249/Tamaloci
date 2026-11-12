@@ -64,6 +64,87 @@ final class PetRepository {
         refresh()
     }
 
+    // MARK: - Simulation persist
+
+    func save(needs: PetNeeds, state: PetRuntimeState) throws {
+        guard let pet = try fetchActiveSDPet() else {
+            throw PetRepositoryError.noActivePet
+        }
+        if let row = pet.needs {
+            row.apply(needs)
+        } else {
+            let row = SDPetNeeds(from: needs)
+            row.pet = pet
+            pet.needs = row
+            modelContext.insert(row)
+        }
+        if let row = pet.state {
+            row.apply(state)
+        } else {
+            let row = SDPetState(from: state)
+            row.pet = pet
+            pet.state = row
+            modelContext.insert(row)
+        }
+        try modelContext.save()
+        refresh()
+    }
+
+    /// Catch up simulation from `lastUpdatedAt` to `now` and persist. No death in M4.
+    @discardableResult
+    func tick(now: Date = Date(), config: SimulationConfig = .default) throws -> PetRecord {
+        guard let pet = try fetchActiveSDPet() else {
+            throw PetRepositoryError.noActivePet
+        }
+        let needs = pet.needs?.asDomain ?? .neutralDefaults
+        let state = pet.state?.asDomain ?? .activeDefaults
+        let from = state.lastUpdatedAt
+        let snapshot = PetSimulation.advance(
+            needs: needs,
+            state: state,
+            from: from,
+            to: now,
+            config: config
+        )
+        try save(needs: snapshot.needs, state: snapshot.state)
+        guard let record = activePet else {
+            throw PetRepositoryError.noActivePet
+        }
+        return record
+    }
+
+    /// Apply care, append history, persist. Ticks first so elapsed neglect is applied.
+    @discardableResult
+    func performCare(
+        _ type: CareEventType,
+        at date: Date = Date(),
+        note: String? = nil,
+        config: SimulationConfig = .default
+    ) throws -> PetRecord {
+        _ = try tick(now: date, config: config)
+        guard let pet = try fetchActiveSDPet() else {
+            throw PetRepositoryError.noActivePet
+        }
+        let needs = pet.needs?.asDomain ?? .neutralDefaults
+        let state = pet.state?.asDomain ?? .activeDefaults
+        let snapshot = PetSimulation.applyCare(
+            type,
+            needs: needs,
+            state: state,
+            at: date,
+            config: config
+        )
+        let event = SDCareEvent(type: type, timestamp: date, note: note)
+        event.pet = pet
+        pet.careEvents.append(event)
+        modelContext.insert(event)
+        try save(needs: snapshot.needs, state: snapshot.state)
+        guard let record = activePet else {
+            throw PetRepositoryError.noActivePet
+        }
+        return record
+    }
+
     // MARK: - Care history
 
     @discardableResult

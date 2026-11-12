@@ -41,6 +41,33 @@ final class PetRepositoryTests: XCTestCase {
         XCTAssertEqual(repository.memorials.count, 1)
     }
 
+    func testTickAdvancesNeedsFromLastUpdatedAt() throws {
+        _ = try repository.createPet(name: "Mochi", avatarConfiguration: .default)
+        let pet = try XCTUnwrap(repository.activePet)
+        let from = pet.state.lastUpdatedAt
+        var state = pet.state
+        state.lastUpdatedAt = from.addingTimeInterval(-6 * 3600)
+        try repository.save(needs: pet.needs, state: state)
+
+        let beforeHunger = repository.activePet!.needs.hunger
+        let updated = try repository.tick(now: from)
+        XCTAssertLessThan(updated.needs.hunger, beforeHunger)
+        XCTAssertEqual(updated.state.lastUpdatedAt, from)
+    }
+
+    func testPerformCareFeedPersistsAndAppendsEvent() throws {
+        _ = try repository.createPet(name: "Mochi", avatarConfiguration: .default)
+        var needs = repository.activePet!.needs
+        needs.hunger = 20
+        try repository.save(needs: needs, state: repository.activePet!.state)
+
+        let updated = try repository.performCare(.feed, note: "breakfast")
+        XCTAssertGreaterThan(updated.needs.hunger, 20)
+        let events = try repository.careEvents(for: updated.id)
+        XCTAssertEqual(events.first?.type, .feed)
+        XCTAssertEqual(events.first?.note, "breakfast")
+    }
+
     func testUserDefaultsMigrationCreatesActivePet() throws {
         let suite = "tamaloci.tests.migrate.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!

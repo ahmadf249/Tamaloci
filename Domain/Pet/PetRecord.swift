@@ -28,13 +28,16 @@ struct PetRuntimeState: Equatable, Sendable {
     var conditionSummary: String
     var lastUpdatedAt: Date
 
-    static let activeDefaults = PetRuntimeState(
-        lifecycleStatus: .active,
-        isSleeping: false,
-        isIll: false,
-        conditionSummary: "healthy",
-        lastUpdatedAt: Date()
-    )
+    /// Fresh active defaults — `lastUpdatedAt` is always “now” (not a one-shot static).
+    static var activeDefaults: PetRuntimeState {
+        PetRuntimeState(
+            lifecycleStatus: .active,
+            isSleeping: false,
+            isIll: false,
+            conditionSummary: "healthy",
+            lastUpdatedAt: Date()
+        )
+    }
 }
 
 struct CareEventRecord: Equatable, Sendable, Identifiable {

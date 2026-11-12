@@ -18,8 +18,10 @@
 		24421B10D78C5989582A35A5 /* AvatarColor+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E98DB28EE681515D231473 /* AvatarColor+UIKit.swift */; };
 		2B18131F6BABE3D4DD0FA597 /* LikenessSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */; };
 		33372781DC9219E46869CAA6 /* AvatarParameterMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93C572839BBDC6D8B72CAE1 /* AvatarParameterMapper.swift */; };
+		33AD133FEC1B9230BBDE256E /* PetSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB36003D6DE9A925487A3478 /* PetSimulation.swift */; };
 		3685678594756D08B505C379 /* UserDefaultsPetMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991C0EE0C2767A31862F3A9 /* UserDefaultsPetMigrator.swift */; };
 		4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */; };
+		5155912667982DAA60D3806E /* SimulationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60BE24C4450E1C652C3CDB /* SimulationConfig.swift */; };
 		539A0BE1E4328567704E4309 /* PetNamingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F43928ADA43B5792BCE8FD /* PetNamingView.swift */; };
 		54E1DF5725B2E2E14A18C9C2 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A43B806FAA1E2284FB0C5 /* AppRouter.swift */; };
 		5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */; };
@@ -34,6 +36,7 @@
 		8706BC3AC61BA4F14AB0FD89 /* CameraPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0400F3672E8465AA40B03CA5 /* CameraPermission.swift */; };
 		A7CFD2FB8BB4806D395BFB39 /* AvatarConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828AF2E62AE0F25C5B957BAC /* AvatarConfigurationTests.swift */; };
 		AABDE2AB97FF83E843D191C3 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F9BE41FCC1DC0574B2839E /* WelcomeView.swift */; };
+		AB21FB5C11A52FC4DB4E40E6 /* PetSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACFE9464DE854AD01799025 /* PetSimulationTests.swift */; };
 		B8B15C04EB4A69B47A6D5C44 /* PetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389A5C4DCC41EC18FA5B77E /* PetRepository.swift */; };
 		B93837AC50DA9D0939AB7E71 /* PetLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900BE280EC1A045B28B02EDF /* PetLifecycle.swift */; };
 		BC75DC173A704F2B9EFC3CA0 /* TamalociModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65684C3ADA0869C1C9F350F /* TamalociModelContainer.swift */; };
@@ -65,6 +68,7 @@
 		0400F3672E8465AA40B03CA5 /* CameraPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermission.swift; sourceTree = "<group>"; };
 		0A3C2BD4990A3FA7DCE3266E /* SelfieCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieCaptureView.swift; sourceTree = "<group>"; };
 		16C25FD42326E296110825F2 /* PetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetRecord.swift; sourceTree = "<group>"; };
+		1F60BE24C4450E1C652C3CDB /* SimulationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationConfig.swift; sourceTree = "<group>"; };
 		26067839E3FC584C7EC1374D /* TamalociTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TamalociTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C29EF6981347CF028C81953 /* AvatarEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarEditorView.swift; sourceTree = "<group>"; };
 		351DDA29984B56D1A39BD81C /* ARKitFaceCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitFaceCaptureService.swift; sourceTree = "<group>"; };
@@ -75,6 +79,7 @@
 		4D8FCCF5978B791C9C2B08ED /* Tamaloci.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tamaloci.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpressionTests.swift; sourceTree = "<group>"; };
 		58DC180A369A000F712B7C8D /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
+		5ACFE9464DE854AD01799025 /* PetSimulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSimulationTests.swift; sourceTree = "<group>"; };
 		645DF1CABEE1D81A6C9ABC59 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
 		6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikenessSampler.swift; sourceTree = "<group>"; };
 		70F9BE41FCC1DC0574B2839E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -99,6 +104,7 @@
 		D65684C3ADA0869C1C9F350F /* TamalociModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamalociModelContainer.swift; sourceTree = "<group>"; };
 		D991C0EE0C2767A31862F3A9 /* UserDefaultsPetMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsPetMigrator.swift; sourceTree = "<group>"; };
 		DAECFA57717B783E5C308256 /* PetCharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCharacterView.swift; sourceTree = "<group>"; };
+		DB36003D6DE9A925487A3478 /* PetSimulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSimulation.swift; sourceTree = "<group>"; };
 		DCBE10FDA835EDB2E4270BF2 /* CreatedPetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPetStore.swift; sourceTree = "<group>"; };
 		E873DEE36FE8FF3947180D23 /* 3D */ = {isa = PBXFileReference; lastKnownFileType = folder; name = 3D; path = Resources/3D; sourceTree = SOURCE_ROOT; };
 		E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamalociApp.swift; sourceTree = "<group>"; };
@@ -169,6 +175,7 @@
 				828AF2E62AE0F25C5B957BAC /* AvatarConfigurationTests.swift */,
 				440BF2957B5C81915467E1B0 /* CreatedPetStoreTests.swift */,
 				55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */,
+				5ACFE9464DE854AD01799025 /* PetSimulationTests.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -238,6 +245,15 @@
 			path = Pet;
 			sourceTree = "<group>";
 		};
+		B045862C5844C04C0E46D61F /* Simulation */ = {
+			isa = PBXGroup;
+			children = (
+				DB36003D6DE9A925487A3478 /* PetSimulation.swift */,
+				1F60BE24C4450E1C652C3CDB /* SimulationConfig.swift */,
+			);
+			path = Simulation;
+			sourceTree = "<group>";
+		};
 		DAAA60474D56060FE0A423FA /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +282,7 @@
 			children = (
 				05CC10D7B8624826787CF930 /* Avatar */,
 				A4909885F81D48ECC22B677A /* Pet */,
+				B045862C5844C04C0E46D61F /* Simulation */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -378,6 +395,7 @@
 				DA4B1CA5EEF6AFC9E99564CF /* CreatedPetStoreTests.swift in Sources */,
 				C079F4B9170AFEEA0A19C081 /* PetExpressionTests.swift in Sources */,
 				0C76A447AD4C22C2A43FEF66 /* PetRepositoryTests.swift in Sources */,
+				AB21FB5C11A52FC4DB4E40E6 /* PetSimulationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,8 +431,10 @@
 				1B0ED975CD082C5A3A8E601D /* PetNeeds.swift in Sources */,
 				BE4052251DB5A049C377BD7B /* PetRecord.swift in Sources */,
 				B8B15C04EB4A69B47A6D5C44 /* PetRepository.swift in Sources */,
+				33AD133FEC1B9230BBDE256E /* PetSimulation.swift in Sources */,
 				5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */,
 				0EE65459245B209A4665C181 /* SelfieCaptureView.swift in Sources */,
+				5155912667982DAA60D3806E /* SimulationConfig.swift in Sources */,
 				7FBBC12AFEA438E89FEC49B4 /* SwiftDataModels.swift in Sources */,
 				4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */,
 				BC75DC173A704F2B9EFC3CA0 /* TamalociModelContainer.swift in Sources */,

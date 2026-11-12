@@ -72,7 +72,20 @@ final class AppModel {
     }
 
     func appendDebugCareEvent() {
-        try? repository.appendCareEvent(type: .feed, note: "DEBUG feed")
+        try? repository.performCare(.feed, note: "DEBUG feed")
+    }
+
+    func advanceSimulationHoursForDebug(_ hours: Double) {
+        guard let pet = repository.activePet else { return }
+        let from = pet.state.lastUpdatedAt
+        let to = from.addingTimeInterval(hours * 3600)
+        let snapshot = PetSimulation.advance(
+            needs: pet.needs,
+            state: pet.state,
+            from: from,
+            to: to
+        )
+        try? repository.save(needs: snapshot.needs, state: snapshot.state)
     }
     #endif
 }
