@@ -5,20 +5,35 @@ enum PetSimulation {
     struct Snapshot: Equatable, Sendable {
         var needs: PetNeeds
         var state: PetRuntimeState
+        var lifeStage: PetLifeStage
     }
 
-    /// Advance needs/state from `from` to `to` using elapsed-time math.
+    /// Advance needs/state/stage from `from` to `to` using elapsed-time math.
     static func advance(
         needs: PetNeeds,
         state: PetRuntimeState,
+        lifeStage: PetLifeStage,
+        birthDate: Date,
         from: Date,
         to: Date,
         config: SimulationConfig = .default
     ) -> Snapshot {
+        let ageDays = ageDays(birthDate: birthDate, asOf: to)
+        let resolvedStage = max(lifeStage, stage(forAgeDays: ageDays, config: config))
+
         let elapsed = max(to.timeIntervalSince(from), 0)
         guard elapsed > 0 else {
-            return Snapshot(needs: needs.clamped(), state: state)
+            var nextState = state
+            nextState.lastUpdatedAt = max(state.lastUpdatedAt, to)
+            return Snapshot(needs: needs.clamped(), state: nextState, lifeStage: resolvedStage)
         }
+
+        if state.lifecycleStatus == .deceased {
+            var nextState = state
+            nextState.lastUpdatedAt = to
+            return Snapshot(needs: needs.clamped(), state: nextState, lifeStage: resolvedStage)
+        }
+
         let hours = elapsed / 3600.0
         var nextNeeds = needs
         var nextState = state
@@ -45,21 +60,33 @@ enum PetSimulation {
         if criticalCount >= config.criticalNeedCountForIllness {
             nextState.isIll = true
         }
-        nextState.conditionSummary = conditionSummary(needs: nextNeeds, state: nextState, config: config)
-        nextState.lastUpdatedAt = to
-        // M4: never flip lifecycle to deceased.
-        if nextState.lifecycleStatus != .deceased {
-            nextState.lifecycleStatus = .active
+
+        // Auto sleep / wake from energy (manual care still overrides between ticks).
+        if !nextState.isSleeping, nextNeeds.energy <= config.autoSleepEnergyThreshold {
+            nextState.isSleeping = true
+        } else if nextState.isSleeping, nextNeeds.energy >= config.autoWakeEnergyThreshold {
+            nextState.isSleeping = false
         }
 
-        return Snapshot(needs: nextNeeds, state: nextState)
+        if nextNeeds.health <= config.deathHealthThreshold {
+            nextState.lifecycleStatus = .deceased
+            nextState.isSleeping = false
+            nextState.conditionSummary = "neglected"
+        } else {
+            nextState.lifecycleStatus = .active
+            nextState.conditionSummary = conditionSummary(needs: nextNeeds, state: nextState, config: config)
+        }
+        nextState.lastUpdatedAt = to
+
+        return Snapshot(needs: nextNeeds, state: nextState, lifeStage: resolvedStage)
     }
 
-    /// Apply a care action (does not append history — caller persists).
+    /// Apply a care action (does not append history — caller persists). Does not cause death.
     static func applyCare(
         _ type: CareEventType,
         needs: PetNeeds,
         state: PetRuntimeState,
+        lifeStage: PetLifeStage,
         at date: Date = Date(),
         config: SimulationConfig = .default
     ) -> Snapshot {
@@ -90,12 +117,29 @@ enum PetSimulation {
         }
 
         nextNeeds = nextNeeds.clamped()
-        nextState.conditionSummary = conditionSummary(needs: nextNeeds, state: nextState, config: config)
+        if nextState.lifecycleStatus != .deceased {
+            nextState.lifecycleStatus = .active
+            nextState.conditionSummary = conditionSummary(needs: nextNeeds, state: nextState, config: config)
+        }
         nextState.lastUpdatedAt = date
-        return Snapshot(needs: nextNeeds, state: nextState)
+        return Snapshot(needs: nextNeeds, state: nextState, lifeStage: lifeStage)
+    }
+
+    static func stage(forAgeDays ageDays: Int, config: SimulationConfig = .default) -> PetLifeStage {
+        if ageDays >= config.adultAgeDays { return .adult }
+        if ageDays >= config.teenagerAgeDays { return .teenager }
+        if ageDays >= config.childAgeDays { return .child }
+        return .baby
+    }
+
+    static func ageDays(birthDate: Date, asOf date: Date) -> Int {
+        max(Calendar.current.dateComponents([.day], from: birthDate, to: date).day ?? 0, 0)
     }
 
     static func suggestedExpression(needs: PetNeeds, state: PetRuntimeState, config: SimulationConfig = .default) -> PetExpression {
+        if state.lifecycleStatus == .deceased {
+            return .deceased
+        }
         if state.isIll || needs.health <= config.criticalHealthThreshold {
             return .sick
         }
@@ -136,6 +180,7 @@ enum PetSimulation {
         state: PetRuntimeState,
         config: SimulationConfig
     ) -> String {
+        if state.lifecycleStatus == .deceased { return "neglected" }
         if state.isIll { return "ill" }
         if needs.health <= config.criticalHealthThreshold { return "critical" }
         if state.isSleeping { return "sleeping" }

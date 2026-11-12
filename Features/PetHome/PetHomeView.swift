@@ -54,6 +54,13 @@ struct PetHomeView: View {
                     .font(.title3.weight(.semibold))
                     .padding(.top, 4)
 
+                if let pet {
+                    Text("\(pet.lifeStage.displayName) · \(ageLabel(pet.ageDays))")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 2)
+                }
+
                 statusBanner
                     .padding(.horizontal, 16)
                     .padding(.bottom, 4)
@@ -171,10 +178,14 @@ struct PetHomeView: View {
         .animation(.easeInOut(duration: 0.35), value: isIllOrCritical)
     }
 
+    private func ageLabel(_ days: Int) -> String {
+        days == 1 ? "1 day" : "\(days) days"
+    }
+
     private func runTickAndSyncExpression() {
         appModel.repository.refresh()
-        if appModel.repository.activePet != nil {
-            try? appModel.repository.tick()
+        if let result = appModel.tickActivePet() {
+            if case .deceased = result { return }
         }
         syncExpressionFromPet()
     }
@@ -186,7 +197,9 @@ struct PetHomeView: View {
 
     private func performCare(_ type: CareEventType) {
         do {
-            _ = try appModel.repository.performCare(type)
+            let result = try appModel.repository.performCare(type)
+            appModel.applyTickResult(result)
+            if case .deceased = result { return }
             syncExpressionFromPet()
             statusMessage = "\(type.displayName) ✓"
             triggerCareFeedback()
@@ -242,7 +255,9 @@ struct PetHomeView: View {
             HStack {
                 Button("Advance 6h") {
                     appModel.advanceSimulationHoursForDebug(6)
-                    syncExpressionFromPet()
+                    if appModel.route == .petHome {
+                        syncExpressionFromPet()
+                    }
                 }
                 Button("Mark deceased") {
                     appModel.markDeceasedForDebug()

@@ -50,7 +50,10 @@ final class PetRepositoryTests: XCTestCase {
         try repository.save(needs: pet.needs, state: state)
 
         let beforeHunger = repository.activePet!.needs.hunger
-        let updated = try repository.tick(now: from)
+        let result = try repository.tick(now: from)
+        guard case .updated(let updated) = result else {
+            return XCTFail("Expected updated pet")
+        }
         XCTAssertLessThan(updated.needs.hunger, beforeHunger)
         XCTAssertEqual(updated.state.lastUpdatedAt, from)
     }
@@ -61,11 +64,56 @@ final class PetRepositoryTests: XCTestCase {
         needs.hunger = 20
         try repository.save(needs: needs, state: repository.activePet!.state)
 
-        let updated = try repository.performCare(.feed, note: "breakfast")
+        let result = try repository.performCare(.feed, note: "breakfast")
+        guard case .updated(let updated) = result else {
+            return XCTFail("Expected updated pet")
+        }
         XCTAssertGreaterThan(updated.needs.hunger, 20)
         let events = try repository.careEvents(for: updated.id)
         XCTAssertEqual(events.first?.type, .feed)
         XCTAssertEqual(events.first?.note, "breakfast")
+    }
+
+    func testTickPersistsLifeStageFromAge() throws {
+        let createdAt = Date()
+        let birthDate = createdAt.addingTimeInterval(-10 * 24 * 3600)
+        _ = try repository.createPet(
+            name: "Mochi",
+            avatarConfiguration: .default,
+            createdAt: createdAt,
+            birthDate: birthDate
+        )
+        let result = try repository.tick(now: createdAt)
+        guard case .updated(let updated) = result else {
+            return XCTFail("Expected updated pet")
+        }
+        XCTAssertEqual(updated.lifeStage, .teenager)
+    }
+
+    func testTickMemorialisesWhenHealthReachesZero() throws {
+        _ = try repository.createPet(name: "Mochi", avatarConfiguration: .default)
+        let pet = try XCTUnwrap(repository.activePet)
+        var needs = PetNeeds(
+            hunger: 0,
+            hydration: 0,
+            happiness: 80,
+            health: 1,
+            cleanliness: 80,
+            energy: 80
+        )
+        var state = pet.state
+        let now = state.lastUpdatedAt
+        state.lastUpdatedAt = now.addingTimeInterval(-72 * 3600)
+        try repository.save(needs: needs, state: state)
+
+        let result = try repository.tick(now: now)
+        guard case .deceased(let memorial) = result else {
+            return XCTFail("Expected deceased memorial")
+        }
+        XCTAssertEqual(memorial.name, "Mochi")
+        XCTAssertEqual(memorial.finalCondition, "neglected")
+        XCTAssertNil(repository.activePet)
+        XCTAssertEqual(repository.memorials.count, 1)
     }
 
     func testUserDefaultsMigrationCreatesActivePet() throws {

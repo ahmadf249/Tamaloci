@@ -16,12 +16,12 @@ final class AppModel {
 
     init(repository: PetRepository) {
         self.repository = repository
-        self.route = repository.hasCompletedOnboarding ? .petHome : .welcome
+        self.route = Self.routeForCurrentPets(repository)
     }
 
     func refreshRoute() {
         repository.refresh()
-        route = repository.hasCompletedOnboarding ? .petHome : .welcome
+        route = Self.routeForCurrentPets(repository)
     }
 
     func startOnboarding() {
@@ -35,6 +35,7 @@ final class AppModel {
 
     func showPetHome() {
         repository.refresh()
+        // Explicit navigation: home if alive, otherwise welcome (memorial keeps its own CTA).
         route = repository.hasCompletedOnboarding ? .petHome : .welcome
     }
 
@@ -52,6 +53,38 @@ final class AppModel {
             print("finishOnboarding failed: \(error)")
             #endif
         }
+    }
+
+    /// Apply a tick and route to memorial if the pet died from neglect.
+    @discardableResult
+    func tickActivePet(now: Date = Date()) -> PetRepository.TickResult? {
+        guard repository.activePet != nil else { return nil }
+        do {
+            let result = try repository.tick(now: now)
+            applyTickResult(result)
+            return result
+        } catch {
+            #if DEBUG
+            print("tick failed: \(error)")
+            #endif
+            return nil
+        }
+    }
+
+    func applyTickResult(_ result: PetRepository.TickResult) {
+        if case .deceased = result {
+            route = .memorial
+        }
+    }
+
+    private static func routeForCurrentPets(_ repository: PetRepository) -> AppRoute {
+        if repository.hasCompletedOnboarding {
+            return .petHome
+        }
+        if !repository.memorials.isEmpty {
+            return .memorial
+        }
+        return .welcome
     }
 
     #if DEBUG
@@ -72,20 +105,17 @@ final class AppModel {
     }
 
     func appendDebugCareEvent() {
-        try? repository.performCare(.feed, note: "DEBUG feed")
+        if let result = try? repository.performCare(.feed, note: "DEBUG feed") {
+            applyTickResult(result)
+        }
     }
 
     func advanceSimulationHoursForDebug(_ hours: Double) {
         guard let pet = repository.activePet else { return }
-        let from = pet.state.lastUpdatedAt
-        let to = from.addingTimeInterval(hours * 3600)
-        let snapshot = PetSimulation.advance(
-            needs: pet.needs,
-            state: pet.state,
-            from: from,
-            to: to
-        )
-        try? repository.save(needs: snapshot.needs, state: snapshot.state)
+        var state = pet.state
+        state.lastUpdatedAt = state.lastUpdatedAt.addingTimeInterval(-hours * 3600)
+        try? repository.save(needs: pet.needs, state: state, lifeStage: pet.lifeStage)
+        _ = tickActivePet()
     }
     #endif
 }

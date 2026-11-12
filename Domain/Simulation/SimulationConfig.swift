@@ -30,8 +30,19 @@ struct SimulationConfig: Equatable, Sendable {
     var criticalNeedCountForHealthDrain: Int
     /// Become ill when this many needs are critical (excluding health itself).
     var criticalNeedCountForIllness: Int
-    /// Health ≤ this is “critical health” for UI (no death in M4).
+    /// Health ≤ this is “critical health” for UI.
     var criticalHealthThreshold: Double
+    /// Health ≤ this after advance → deceased (M5).
+    var deathHealthThreshold: Double
+
+    /// Age days (from birth) at which each stage begins.
+    var childAgeDays: Int
+    var teenagerAgeDays: Int
+    var adultAgeDays: Int
+
+    /// Auto-sleep when awake and energy ≤ this; auto-wake when sleeping and energy ≥ this.
+    var autoSleepEnergyThreshold: Double
+    var autoWakeEnergyThreshold: Double
 
     static let `default` = SimulationConfig(
         hungerDrainPerHour: 4,
@@ -52,6 +63,12 @@ struct SimulationConfig: Equatable, Sendable {
         healthDrainPerHourWhenCritical: 4,
         criticalNeedCountForHealthDrain: 2,
         criticalNeedCountForIllness: 2,
-        criticalHealthThreshold: 30
+        criticalHealthThreshold: 30,
+        deathHealthThreshold: 0,
+        childAgeDays: 3,
+        teenagerAgeDays: 7,
+        adultAgeDays: 14,
+        autoSleepEnergyThreshold: 0,
+        autoWakeEnergyThreshold: 80
     )
 }

@@ -66,9 +66,17 @@ final class PetRepository {
 
     // MARK: - Simulation persist
 
-    func save(needs: PetNeeds, state: PetRuntimeState) throws {
+    enum TickResult: Equatable, Sendable {
+        case updated(PetRecord)
+        case deceased(PetMemorialRecord)
+    }
+
+    func save(needs: PetNeeds, state: PetRuntimeState, lifeStage: PetLifeStage? = nil) throws {
         guard let pet = try fetchActiveSDPet() else {
             throw PetRepositoryError.noActivePet
+        }
+        if let lifeStage {
+            pet.lifeStage = lifeStage
         }
         if let row = pet.needs {
             row.apply(needs)
@@ -90,9 +98,9 @@ final class PetRepository {
         refresh()
     }
 
-    /// Catch up simulation from `lastUpdatedAt` to `now` and persist. No death in M4.
+    /// Catch up simulation from `lastUpdatedAt` to `now` and persist. May memorialise on death (M5).
     @discardableResult
-    func tick(now: Date = Date(), config: SimulationConfig = .default) throws -> PetRecord {
+    func tick(now: Date = Date(), config: SimulationConfig = .default) throws -> TickResult {
         guard let pet = try fetchActiveSDPet() else {
             throw PetRepositoryError.noActivePet
         }
@@ -102,15 +110,32 @@ final class PetRepository {
         let snapshot = PetSimulation.advance(
             needs: needs,
             state: state,
+            lifeStage: pet.lifeStage,
+            birthDate: pet.birthDate,
             from: from,
             to: now,
             config: config
         )
-        try save(needs: snapshot.needs, state: snapshot.state)
+
+        if snapshot.state.lifecycleStatus == .deceased {
+            // Persist final meters/stage briefly, then memorialise (clears active).
+            pet.lifeStage = snapshot.lifeStage
+            if let row = pet.needs {
+                row.apply(snapshot.needs)
+            }
+            if let row = pet.state {
+                row.apply(snapshot.state)
+            }
+            try modelContext.save()
+            let memorial = try markActivePetDeceased(finalCondition: snapshot.state.conditionSummary)
+            return .deceased(memorial)
+        }
+
+        try save(needs: snapshot.needs, state: snapshot.state, lifeStage: snapshot.lifeStage)
         guard let record = activePet else {
             throw PetRepositoryError.noActivePet
         }
-        return record
+        return .updated(record)
     }
 
     /// Apply care, append history, persist. Ticks first so elapsed neglect is applied.
@@ -120,8 +145,11 @@ final class PetRepository {
         at date: Date = Date(),
         note: String? = nil,
         config: SimulationConfig = .default
-    ) throws -> PetRecord {
-        _ = try tick(now: date, config: config)
+    ) throws -> TickResult {
+        let tickResult = try tick(now: date, config: config)
+        if case .deceased = tickResult {
+            return tickResult
+        }
         guard let pet = try fetchActiveSDPet() else {
             throw PetRepositoryError.noActivePet
         }
@@ -131,6 +159,7 @@ final class PetRepository {
             type,
             needs: needs,
             state: state,
+            lifeStage: pet.lifeStage,
             at: date,
             config: config
         )
@@ -138,11 +167,11 @@ final class PetRepository {
         event.pet = pet
         pet.careEvents.append(event)
         modelContext.insert(event)
-        try save(needs: snapshot.needs, state: snapshot.state)
+        try save(needs: snapshot.needs, state: snapshot.state, lifeStage: snapshot.lifeStage)
         guard let record = activePet else {
             throw PetRepositoryError.noActivePet
         }
-        return record
+        return .updated(record)
     }
 
     // MARK: - Care history
