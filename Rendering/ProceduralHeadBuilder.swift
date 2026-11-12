@@ -15,13 +15,14 @@ enum ProceduralHeadBuilder {
     static let mouthName = "mouth"
     static let noseName = "nose"
 
-    static func makeHead() -> Entity {
+    static func makeHead(configuration: AvatarConfiguration = .default) -> Entity {
         let root = Entity()
         root.name = headName
+        let skin = configuration.skinTint.uiColor
 
         let skull = ModelEntity(
             mesh: .generateSphere(radius: 0.12),
-            materials: [skinMaterial(UIColor(red: 0.96, green: 0.80, blue: 0.70, alpha: 1))]
+            materials: [skinMaterial(skin)]
         )
         skull.name = skullName
         root.addChild(skull)
@@ -29,20 +30,22 @@ enum ProceduralHeadBuilder {
         let leftEye = makeEye()
         leftEye.name = leftEyeName
         leftEye.position = [-0.04, 0.025, 0.10]
+        leftEye.scale = SIMD3<Float>(repeating: configuration.eyeScale)
         root.addChild(leftEye)
 
         let rightEye = makeEye()
         rightEye.name = rightEyeName
         rightEye.position = [0.04, 0.025, 0.10]
+        rightEye.scale = SIMD3<Float>(repeating: configuration.eyeScale)
         root.addChild(rightEye)
 
-        let leftLid = makeLid()
+        let leftLid = makeLid(skin: skin)
         leftLid.name = leftLidName
         leftLid.position = [-0.04, 0.045, 0.105]
         leftLid.scale = [1, 0.05, 1]
         root.addChild(leftLid)
 
-        let rightLid = makeLid()
+        let rightLid = makeLid(skin: skin)
         rightLid.name = rightLidName
         rightLid.position = [0.04, 0.045, 0.105]
         rightLid.scale = [1, 0.05, 1]
@@ -51,16 +54,18 @@ enum ProceduralHeadBuilder {
         let leftBrow = makeBrow()
         leftBrow.name = leftBrowName
         leftBrow.position = [-0.04, 0.06, 0.105]
+        leftBrow.scale = [configuration.browScale, 1, 1]
         root.addChild(leftBrow)
 
         let rightBrow = makeBrow()
         rightBrow.name = rightBrowName
         rightBrow.position = [0.04, 0.06, 0.105]
+        rightBrow.scale = [configuration.browScale, 1, 1]
         root.addChild(rightBrow)
 
         let nose = ModelEntity(
             mesh: .generateSphere(radius: 0.018),
-            materials: [skinMaterial(UIColor(red: 0.92, green: 0.72, blue: 0.62, alpha: 1))]
+            materials: [skinMaterial(skin.darker(by: 0.08))]
         )
         nose.name = noseName
         nose.position = [0, -0.005, 0.118]
@@ -85,10 +90,10 @@ enum ProceduralHeadBuilder {
         )
     }
 
-    private static func makeLid() -> ModelEntity {
+    private static func makeLid(skin: UIColor) -> ModelEntity {
         ModelEntity(
             mesh: .generateSphere(radius: 0.019),
-            materials: [skinMaterial(UIColor(red: 0.96, green: 0.80, blue: 0.70, alpha: 1))]
+            materials: [skinMaterial(skin)]
         )
     }
 

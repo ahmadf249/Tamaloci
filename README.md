@@ -7,21 +7,22 @@ Native iOS virtual-pet game. Offline-first Tamagotchi-style care with a stylized
 
 ## Active focus
 
-**M1 — Avatar system** (slice **M1.1**: head path + idle polish)
+**M1 — Avatar system** complete. Next: first **M2** slice (pet creation / onboarding) when written in private docs.
 
 Product roadmap, requirements PDF, asset policy, and runbook live in a local `docs/` folder that is **not published** with this repository. Keep your private copy nearby when developing.
 
 | Milestone | Status |
 | --- | --- |
 | M0 — Prototype (floating head + expression HUD) | Done |
-| M1 — Avatar system | Next |
+| M1 — Avatar system | Done |
 | M2+ | Tracked in local private docs |
 
-## M0 shipped (prototype)
+## M1 shipped (avatar system)
 
-- SwiftUI shell with brand title
-- RealityKit procedural floating head (idle float + blink)
-- Expression pipeline driven by HUD / test state
+- `PetHeadFactory` entry point (procedural default; USDZ hook when licensed asset exists)
+- Idle polish: blink, float, eye gaze, head pitch/yaw (Reduce Motion respected)
+- Expressions from `PetExpressionTestState` (incl. distressed); no ARKit
+- `AvatarConfiguration` save/restore (UserDefaults) with view recreate round-trip
 - Domain stubs for future simulation (`PetNeeds`, lifecycle)
 
 ## Open in Xcode

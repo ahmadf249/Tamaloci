@@ -4,7 +4,7 @@ import XCTest
 final class PetExpressionTests: XCTestCase {
     func testRequiredExpressionsMatchSpec() {
         let expected: [PetExpression] = [
-            .neutral, .happy, .sad, .hungry, .sleepy, .sick, .deceased
+            .neutral, .happy, .sad, .hungry, .sleepy, .sick, .distressed, .deceased
         ]
         XCTAssertEqual(PetExpression.allCases, expected)
     }
@@ -24,5 +24,13 @@ final class PetExpressionTests: XCTestCase {
             XCTAssertGreaterThanOrEqual(value, 0)
             XCTAssertLessThanOrEqual(value, 100)
         }
+    }
+
+    @MainActor
+    func testExpressionTestStateDrivesSuppliedExpression() {
+        let state = PetExpressionTestState()
+        XCTAssertEqual(state.expression, .neutral)
+        state.setExpression(.distressed)
+        XCTAssertEqual(state.expression, .distressed)
     }
 }

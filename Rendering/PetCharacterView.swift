@@ -4,6 +4,7 @@ import UIKit
 
 struct PetCharacterView: UIViewRepresentable {
     @Binding var expression: PetExpression
+    var avatarConfiguration: AvatarConfiguration = .default
     var reduceMotion: Bool
 
     func makeCoordinator() -> Coordinator {
@@ -17,9 +18,10 @@ struct PetCharacterView: UIViewRepresentable {
         arView.renderOptions.insert(.disableMotionBlur)
 
         let anchor = AnchorEntity(world: .zero)
-        let head = ProceduralHeadBuilder.makeHead()
+        let head = PetHeadFactory.makeHead(configuration: avatarConfiguration)
         head.position = [0, 0, 0]
         anchor.addChild(head)
+        context.coordinator.appliedConfiguration = avatarConfiguration
 
         let light = DirectionalLight()
         light.light.color = .white
@@ -43,7 +45,11 @@ struct PetCharacterView: UIViewRepresentable {
         cameraAnchor.addChild(camera)
         arView.scene.anchors.append(cameraAnchor)
 
-        context.coordinator.animationController.attach(to: head, reduceMotion: reduceMotion)
+        context.coordinator.animationController.attach(
+            to: head,
+            reduceMotion: reduceMotion,
+            configuration: avatarConfiguration
+        )
         context.coordinator.headRoot = head
         return arView
     }
@@ -51,6 +57,13 @@ struct PetCharacterView: UIViewRepresentable {
     func updateUIView(_ uiView: ARView, context: Context) {
         let controller = context.coordinator.animationController
         controller.updateReduceMotion(reduceMotion)
+        if context.coordinator.appliedConfiguration != avatarConfiguration,
+           let head = context.coordinator.headRoot {
+            PetHeadFactory.applyConfiguration(avatarConfiguration, to: head)
+            context.coordinator.appliedConfiguration = avatarConfiguration
+            controller.applyAppearanceBaseline(avatarConfiguration)
+            controller.setExpression(expression, animated: false)
+        }
         if controller.currentExpression != expression {
             controller.setExpression(expression)
         }
@@ -64,5 +77,6 @@ struct PetCharacterView: UIViewRepresentable {
     final class Coordinator {
         let animationController = PetAnimationController()
         var headRoot: Entity?
+        var appliedConfiguration: AvatarConfiguration = .default
     }
 }

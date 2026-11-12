@@ -1,7 +1,7 @@
 import Foundation
 
 /// Gameplay facial expressions required by the Phase I / PDF §3.5 animation proof.
-/// Simulation state (not live ARKit face tracking) will drive these later.
+/// Simulation / test state (not live ARKit face tracking) drives these.
 enum PetExpression: String, CaseIterable, Identifiable, Sendable {
     case neutral
     case happy
@@ -9,6 +9,7 @@ enum PetExpression: String, CaseIterable, Identifiable, Sendable {
     case hungry
     case sleepy
     case sick
+    case distressed
     case deceased
 
     var id: String { rawValue }
@@ -21,6 +22,7 @@ enum PetExpression: String, CaseIterable, Identifiable, Sendable {
         case .hungry: return "Hungry"
         case .sleepy: return "Sleepy"
         case .sick: return "Sick"
+        case .distressed: return "Distressed"
         case .deceased: return "Deceased"
         }
     }
