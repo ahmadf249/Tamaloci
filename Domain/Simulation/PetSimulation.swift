@@ -1,6 +1,6 @@
 import Foundation
 
-/// Pure pet simulation — no SwiftUI / RealityKit / SwiftData.
+/// Pure pet simulation — no SwiftUI / RealityKit / SwiftData / WeatherKit / UIKit.
 enum PetSimulation {
     struct Snapshot: Equatable, Sendable {
         var needs: PetNeeds
@@ -16,14 +16,15 @@ enum PetSimulation {
         birthDate: Date,
         from: Date,
         to: Date,
-        config: SimulationConfig = .default
+        config: SimulationConfig = .default,
+        context: SimulationContext = .empty
     ) -> Snapshot {
         let ageDays = ageDays(birthDate: birthDate, asOf: to)
         let resolvedStage = max(lifeStage, stage(forAgeDays: ageDays, config: config))
 
         let elapsed = max(to.timeIntervalSince(from), 0)
         guard elapsed > 0 else {
-            var nextState = state
+            var nextState = reconcileBattery(state: state, context: context, at: to)
             nextState.lastUpdatedAt = max(state.lastUpdatedAt, to)
             return Snapshot(needs: needs.clamped(), state: nextState, lifeStage: resolvedStage)
         }
@@ -38,10 +39,11 @@ enum PetSimulation {
         var nextNeeds = needs
         var nextState = state
 
-        let drainMul = nextState.isSleeping ? config.sleepDrainMultiplier : 1.0
-        nextNeeds.hunger -= config.hungerDrainPerHour * hours * drainMul
-        nextNeeds.hydration -= config.hydrationDrainPerHour * hours * drainMul
-        nextNeeds.happiness -= config.happinessDrainPerHour * hours
+        let envFactors = environmentDrainFactors(context: context, asOf: to, config: config)
+        let sleepMul = nextState.isSleeping ? config.sleepDrainMultiplier : 1.0
+        nextNeeds.hunger -= config.hungerDrainPerHour * hours * sleepMul
+        nextNeeds.hydration -= config.hydrationDrainPerHour * hours * sleepMul * envFactors.hydration
+        nextNeeds.happiness -= config.happinessDrainPerHour * hours * envFactors.happiness
         nextNeeds.cleanliness -= config.cleanlinessDrainPerHour * hours
 
         if nextState.isSleeping {
@@ -61,16 +63,25 @@ enum PetSimulation {
             nextState.isIll = true
         }
 
-        // Auto sleep / wake from energy (manual care still overrides between ticks).
+        // Auto sleep / wake from energy (battery reconcile happens after).
         if !nextState.isSleeping, nextNeeds.energy <= config.autoSleepEnergyThreshold {
             nextState.isSleeping = true
-        } else if nextState.isSleeping, nextNeeds.energy >= config.autoWakeEnergyThreshold {
+            if nextState.sleepSource != .charging {
+                nextState.sleepSource = .scheduled
+            }
+        } else if nextState.isSleeping,
+                  nextState.sleepSource != .charging,
+                  nextNeeds.energy >= config.autoWakeEnergyThreshold {
             nextState.isSleeping = false
+            nextState.sleepSource = .manual
         }
+
+        nextState = reconcileBattery(state: nextState, context: context, at: to)
 
         if nextNeeds.health <= config.deathHealthThreshold {
             nextState.lifecycleStatus = .deceased
             nextState.isSleeping = false
+            nextState.sleepSource = .manual
             nextState.conditionSummary = "neglected"
         } else {
             nextState.lifecycleStatus = .active
@@ -103,6 +114,7 @@ enum PetSimulation {
             nextNeeds.happiness += config.playHappinessRecovery
             nextNeeds.energy -= config.playEnergyCost
             nextState.isSleeping = false
+            nextState.sleepSource = .manual
         case .clean:
             nextNeeds.cleanliness += config.cleanRecovery
         case .medicine:
@@ -112,8 +124,10 @@ enum PetSimulation {
             }
         case .sleep:
             nextState.isSleeping = true
+            nextState.sleepSource = .manual
         case .wake:
             nextState.isSleeping = false
+            nextState.sleepSource = .manual
         }
 
         nextNeeds = nextNeeds.clamped()
@@ -164,6 +178,56 @@ enum PetSimulation {
     }
 
     // MARK: - Helpers
+
+    private struct EnvDrainFactors {
+        var hydration: Double
+        var happiness: Double
+    }
+
+    private static func environmentDrainFactors(
+        context: SimulationContext,
+        asOf date: Date,
+        config: SimulationConfig
+    ) -> EnvDrainFactors {
+        guard let env = context.environment,
+              let temp = env.temperatureCelsius,
+              let captured = env.capturedAt
+        else {
+            return EnvDrainFactors(hydration: 1, happiness: 1)
+        }
+        let ageHours = date.timeIntervalSince(captured) / 3600.0
+        guard ageHours >= 0, ageHours <= config.environmentMaxAgeHours else {
+            return EnvDrainFactors(hydration: 1, happiness: 1)
+        }
+        var hydration: Double = 1
+        var happiness: Double = 1
+        if temp > config.hotTemperatureCelsius {
+            hydration = config.hotHydrationDrainMultiplier
+        }
+        if temp < config.coldTemperatureCelsius {
+            happiness = config.coldHappinessDrainMultiplier
+        }
+        return EnvDrainFactors(hydration: hydration, happiness: happiness)
+    }
+
+    /// Apply only currently observed charging — does not invent mid-absence unplug times.
+    private static func reconcileBattery(
+        state: PetRuntimeState,
+        context: SimulationContext,
+        at date: Date
+    ) -> PetRuntimeState {
+        var next = state
+        guard let charging = context.batteryCharging else { return next }
+        if charging {
+            next.isSleeping = true
+            next.sleepSource = .charging
+        } else if next.sleepSource == .charging {
+            next.isSleeping = false
+            next.sleepSource = .manual
+        }
+        _ = date
+        return next
+    }
 
     private static func criticalNeedCount(_ needs: PetNeeds, threshold: Double) -> Int {
         [

@@ -100,7 +100,11 @@ final class PetRepository {
 
     /// Catch up simulation from `lastUpdatedAt` to `now` and persist. May memorialise on death (M5).
     @discardableResult
-    func tick(now: Date = Date(), config: SimulationConfig = .default) throws -> TickResult {
+    func tick(
+        now: Date = Date(),
+        config: SimulationConfig = .default,
+        context: SimulationContext = .empty
+    ) throws -> TickResult {
         guard let pet = try fetchActiveSDPet() else {
             throw PetRepositoryError.noActivePet
         }
@@ -114,7 +118,8 @@ final class PetRepository {
             birthDate: pet.birthDate,
             from: from,
             to: now,
-            config: config
+            config: config,
+            context: context
         )
 
         if snapshot.state.lifecycleStatus == .deceased {
@@ -144,9 +149,10 @@ final class PetRepository {
         _ type: CareEventType,
         at date: Date = Date(),
         note: String? = nil,
-        config: SimulationConfig = .default
+        config: SimulationConfig = .default,
+        context: SimulationContext = .empty
     ) throws -> TickResult {
-        let tickResult = try tick(now: date, config: config)
+        let tickResult = try tick(now: date, config: config, context: context)
         if case .deceased = tickResult {
             return tickResult
         }
@@ -211,10 +217,15 @@ final class PetRepository {
         }
     }
 
-    // MARK: - Environment (schema only until M6)
+    // MARK: - Environment
 
+    /// Replace prior snapshots for the active pet with a single latest row.
     func upsertEnvironmentSnapshot(_ snapshot: EnvironmentSnapshotRecord) throws {
         guard let pet = try fetchActiveSDPet() else { return }
+        for old in pet.environmentSnapshots {
+            modelContext.delete(old)
+        }
+        pet.environmentSnapshots.removeAll()
         let row = SDEnvironmentSnapshot(
             temperatureCelsius: snapshot.temperatureCelsius,
             conditionCode: snapshot.conditionCode,
@@ -224,6 +235,19 @@ final class PetRepository {
         pet.environmentSnapshots.append(row)
         modelContext.insert(row)
         try modelContext.save()
+    }
+
+    func latestEnvironmentSnapshot() -> EnvironmentSnapshotRecord? {
+        guard let pet = try? fetchActiveSDPet() else { return nil }
+        let latest = pet.environmentSnapshots.max { a, b in
+            (a.capturedAt ?? .distantPast) < (b.capturedAt ?? .distantPast)
+        }
+        guard let latest else { return nil }
+        return EnvironmentSnapshotRecord(
+            temperatureCelsius: latest.temperatureCelsius,
+            conditionCode: latest.conditionCode,
+            capturedAt: latest.capturedAt
+        )
     }
 
     // MARK: - Memorial

@@ -57,10 +57,13 @@ final class AppModel {
 
     /// Apply a tick and route to memorial if the pet died from neglect.
     @discardableResult
-    func tickActivePet(now: Date = Date()) -> PetRepository.TickResult? {
+    func tickActivePet(
+        now: Date = Date(),
+        context: SimulationContext = .empty
+    ) -> PetRepository.TickResult? {
         guard repository.activePet != nil else { return nil }
         do {
-            let result = try repository.tick(now: now)
+            let result = try repository.tick(now: now, context: context)
             applyTickResult(result)
             return result
         } catch {
@@ -71,9 +74,30 @@ final class AppModel {
         }
     }
 
+    /// Best-effort weather + battery, then tick, then local notification sync.
+    @discardableResult
+    func refreshDeviceIntegrationsAndTick(now: Date = Date()) async -> PetRepository.TickResult? {
+        guard repository.activePet != nil else { return nil }
+
+        if let fresh = await WeatherEnvironmentService.shared.fetchCurrentSnapshot() {
+            try? repository.upsertEnvironmentSnapshot(fresh)
+        }
+
+        let context = SimulationContext(
+            environment: repository.latestEnvironmentSnapshot(),
+            batteryCharging: BatterySleepMonitor.shared.isCharging
+        )
+        let result = tickActivePet(now: now, context: context)
+        await CareNotificationScheduler.shared.sync(pet: repository.activePet)
+        return result
+    }
+
     func applyTickResult(_ result: PetRepository.TickResult) {
         if case .deceased = result {
             route = .memorial
+            Task {
+                await CareNotificationScheduler.shared.sync(pet: nil)
+            }
         }
     }
 
@@ -99,6 +123,7 @@ final class AppModel {
         do {
             _ = try repository.markActivePetDeceased()
             route = .memorial
+            Task { await CareNotificationScheduler.shared.sync(pet: nil) }
         } catch {
             print("markDeceased failed: \(error)")
         }
@@ -107,6 +132,7 @@ final class AppModel {
     func appendDebugCareEvent() {
         if let result = try? repository.performCare(.feed, note: "DEBUG feed") {
             applyTickResult(result)
+            Task { await CareNotificationScheduler.shared.sync(pet: repository.activePet) }
         }
     }
 
@@ -115,7 +141,12 @@ final class AppModel {
         var state = pet.state
         state.lastUpdatedAt = state.lastUpdatedAt.addingTimeInterval(-hours * 3600)
         try? repository.save(needs: pet.needs, state: state, lifeStage: pet.lifeStage)
-        _ = tickActivePet()
+        let context = SimulationContext(
+            environment: repository.latestEnvironmentSnapshot(),
+            batteryCharging: BatterySleepMonitor.shared.isCharging
+        )
+        _ = tickActivePet(context: context)
+        Task { await CareNotificationScheduler.shared.sync(pet: repository.activePet) }
     }
     #endif
 }

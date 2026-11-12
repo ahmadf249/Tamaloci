@@ -26,6 +26,8 @@
 		54E1DF5725B2E2E14A18C9C2 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A43B806FAA1E2284FB0C5 /* AppRouter.swift */; };
 		5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */; };
 		5C181A77BA59FD9E1A3A3B51 /* CreatedPetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE10FDA835EDB2E4270BF2 /* CreatedPetStore.swift */; };
+		5CCE0EAE618A1F05B8B05849 /* SimulationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671AA91D53470379B2886672 /* SimulationContext.swift */; };
+		673EAF72C7D3BCA609642884 /* BatterySleepMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2781A77415E5429B0A00EA1 /* BatterySleepMonitor.swift */; };
 		6ADC8BB2289BF7DD2A8FD9E7 /* PetCharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECFA57717B783E5C308256 /* PetCharacterView.swift */; };
 		709F48FFE8D13A311A76544D /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645DF1CABEE1D81A6C9ABC59 /* OnboardingFlowView.swift */; };
 		713FA8A8DA2DB7EB6B608581 /* AvatarEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C29EF6981347CF028C81953 /* AvatarEditorView.swift */; };
@@ -51,6 +53,8 @@
 		E3C0FEA001E0739B95575BA9 /* MemorialListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBAC72E77FF1C207EEEE862 /* MemorialListView.swift */; };
 		E468A6A9B6DECCF222A8970B /* AvatarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D0C78DECB67FF190EBDAB8 /* AvatarConfiguration.swift */; };
 		E996F1A7B7DA4FA3AB16D1FB /* AvatarParameterMapper+Vision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B779D2BE1DF9106ACBA9E5 /* AvatarParameterMapper+Vision.swift */; };
+		F51E79D2B54EE3D9587A7E6A /* WeatherEnvironmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3169FBE3154203ACCC3ED3E3 /* WeatherEnvironmentService.swift */; };
+		F6B1D01E12A39D7E0CE532CC /* CareNotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53753567441EB1B7931F0748 /* CareNotificationScheduler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,16 +75,19 @@
 		1F60BE24C4450E1C652C3CDB /* SimulationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationConfig.swift; sourceTree = "<group>"; };
 		26067839E3FC584C7EC1374D /* TamalociTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TamalociTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C29EF6981347CF028C81953 /* AvatarEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarEditorView.swift; sourceTree = "<group>"; };
+		3169FBE3154203ACCC3ED3E3 /* WeatherEnvironmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEnvironmentService.swift; sourceTree = "<group>"; };
 		351DDA29984B56D1A39BD81C /* ARKitFaceCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitFaceCaptureService.swift; sourceTree = "<group>"; };
 		3BE9A10EA4053D1DA69F213D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E019D1363E9B67A2F22C336 /* ARFaceLivePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARFaceLivePreviewView.swift; sourceTree = "<group>"; };
 		3F86AC27367FF5B5456B6AEC /* ProceduralHeadBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduralHeadBuilder.swift; sourceTree = "<group>"; };
 		440BF2957B5C81915467E1B0 /* CreatedPetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPetStoreTests.swift; sourceTree = "<group>"; };
 		4D8FCCF5978B791C9C2B08ED /* Tamaloci.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tamaloci.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		53753567441EB1B7931F0748 /* CareNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareNotificationScheduler.swift; sourceTree = "<group>"; };
 		55537BA2343B275F8ABF8761 /* PetExpressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetExpressionTests.swift; sourceTree = "<group>"; };
 		58DC180A369A000F712B7C8D /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
 		5ACFE9464DE854AD01799025 /* PetSimulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSimulationTests.swift; sourceTree = "<group>"; };
 		645DF1CABEE1D81A6C9ABC59 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		671AA91D53470379B2886672 /* SimulationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationContext.swift; sourceTree = "<group>"; };
 		6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikenessSampler.swift; sourceTree = "<group>"; };
 		70F9BE41FCC1DC0574B2839E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		72F43928ADA43B5792BCE8FD /* PetNamingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNamingView.swift; sourceTree = "<group>"; };
@@ -108,6 +115,7 @@
 		DCBE10FDA835EDB2E4270BF2 /* CreatedPetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPetStore.swift; sourceTree = "<group>"; };
 		E873DEE36FE8FF3947180D23 /* 3D */ = {isa = PBXFileReference; lastKnownFileType = folder; name = 3D; path = Resources/3D; sourceTree = SOURCE_ROOT; };
 		E8C9DD095C9D2DE2AD3041EA /* TamalociApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamalociApp.swift; sourceTree = "<group>"; };
+		F2781A77415E5429B0A00EA1 /* BatterySleepMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySleepMonitor.swift; sourceTree = "<group>"; };
 		F93C572839BBDC6D8B72CAE1 /* AvatarParameterMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarParameterMapper.swift; sourceTree = "<group>"; };
 		FBA6AFD4FCAD360CE923165A /* CreatedPet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedPet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				FBDE431F85026364440DF0F9 /* Capture */,
+				F3717D2C65909BC87FFD08F6 /* Device */,
 				A4609B06F6ED50D762E93C22 /* Memorial */,
 				4E8C157D6CB3AD5D98B9E950 /* Onboarding */,
 				07377ED7F1762BDF7A8C4A19 /* PetHome */,
@@ -250,6 +259,7 @@
 			children = (
 				DB36003D6DE9A925487A3478 /* PetSimulation.swift */,
 				1F60BE24C4450E1C652C3CDB /* SimulationConfig.swift */,
+				671AA91D53470379B2886672 /* SimulationContext.swift */,
 			);
 			path = Simulation;
 			sourceTree = "<group>";
@@ -285,6 +295,16 @@
 				B045862C5844C04C0E46D61F /* Simulation */,
 			);
 			path = Domain;
+			sourceTree = "<group>";
+		};
+		F3717D2C65909BC87FFD08F6 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				F2781A77415E5429B0A00EA1 /* BatterySleepMonitor.swift */,
+				53753567441EB1B7931F0748 /* CareNotificationScheduler.swift */,
+				3169FBE3154203ACCC3ED3E3 /* WeatherEnvironmentService.swift */,
+			);
+			path = Device;
 			sourceTree = "<group>";
 		};
 		FBDE431F85026364440DF0F9 /* Capture */ = {
@@ -412,8 +432,10 @@
 				713FA8A8DA2DB7EB6B608581 /* AvatarEditorView.swift in Sources */,
 				E996F1A7B7DA4FA3AB16D1FB /* AvatarParameterMapper+Vision.swift in Sources */,
 				33372781DC9219E46869CAA6 /* AvatarParameterMapper.swift in Sources */,
+				673EAF72C7D3BCA609642884 /* BatterySleepMonitor.swift in Sources */,
 				8706BC3AC61BA4F14AB0FD89 /* CameraPermission.swift in Sources */,
 				DE8BB116A24746E252F90651 /* CareEventType.swift in Sources */,
+				F6B1D01E12A39D7E0CE532CC /* CareNotificationScheduler.swift in Sources */,
 				23190182273B04171CF55D75 /* CreatedPet.swift in Sources */,
 				5C181A77BA59FD9E1A3A3B51 /* CreatedPetStore.swift in Sources */,
 				DEDDBAA6BDF8C980AFFC2A1D /* FaceCaptureCapability.swift in Sources */,
@@ -435,10 +457,12 @@
 				5A5599B5885DDE5D183CDB43 /* ProceduralHeadBuilder.swift in Sources */,
 				0EE65459245B209A4665C181 /* SelfieCaptureView.swift in Sources */,
 				5155912667982DAA60D3806E /* SimulationConfig.swift in Sources */,
+				5CCE0EAE618A1F05B8B05849 /* SimulationContext.swift in Sources */,
 				7FBBC12AFEA438E89FEC49B4 /* SwiftDataModels.swift in Sources */,
 				4A55340DE68E5AF913C4CB76 /* TamalociApp.swift in Sources */,
 				BC75DC173A704F2B9EFC3CA0 /* TamalociModelContainer.swift in Sources */,
 				3685678594756D08B505C379 /* UserDefaultsPetMigrator.swift in Sources */,
+				F51E79D2B54EE3D9587A7E6A /* WeatherEnvironmentService.swift in Sources */,
 				AABDE2AB97FF83E843D191C3 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,6 +603,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Resources/Tamaloci.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -586,6 +611,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "TAMA\"LO\"CI";
 				INFOPLIST_KEY_NSCameraUsageDescription = "TAMA\"LO\"CI uses the camera for a short face scan to style your pet avatar. Photos are not kept after setup.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "TAMA\"LO\"CI uses your location once to check local weather so temperature can affect your pet’s comfort. Location is not stored.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -639,6 +665,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Resources/Tamaloci.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -646,6 +673,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "TAMA\"LO\"CI";
 				INFOPLIST_KEY_NSCameraUsageDescription = "TAMA\"LO\"CI uses the camera for a short face scan to style your pet avatar. Photos are not kept after setup.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "TAMA\"LO\"CI uses your location once to check local weather so temperature can affect your pet’s comfort. Location is not stored.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

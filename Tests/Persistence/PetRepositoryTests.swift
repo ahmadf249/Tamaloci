@@ -90,6 +90,38 @@ final class PetRepositoryTests: XCTestCase {
         XCTAssertEqual(updated.lifeStage, .teenager)
     }
 
+    func testUpsertEnvironmentSnapshotKeepsLatestOnly() throws {
+        _ = try repository.createPet(name: "Mochi", avatarConfiguration: .default)
+        try repository.upsertEnvironmentSnapshot(
+            EnvironmentSnapshotRecord(temperatureCelsius: 20, conditionCode: "a", capturedAt: Date())
+        )
+        try repository.upsertEnvironmentSnapshot(
+            EnvironmentSnapshotRecord(temperatureCelsius: 30, conditionCode: "b", capturedAt: Date())
+        )
+        let latest = try XCTUnwrap(repository.latestEnvironmentSnapshot())
+        XCTAssertEqual(latest.temperatureCelsius, 30)
+        XCTAssertEqual(latest.conditionCode, "b")
+    }
+
+    func testTickWithChargingContextSetsSleepSource() throws {
+        _ = try repository.createPet(name: "Mochi", avatarConfiguration: .default)
+        let pet = try XCTUnwrap(repository.activePet)
+        var state = pet.state
+        let now = state.lastUpdatedAt
+        state.lastUpdatedAt = now.addingTimeInterval(-3600)
+        try repository.save(needs: pet.needs, state: state)
+
+        let result = try repository.tick(
+            now: now,
+            context: SimulationContext(environment: nil, batteryCharging: true)
+        )
+        guard case .updated(let updated) = result else {
+            return XCTFail("Expected updated pet")
+        }
+        XCTAssertTrue(updated.state.isSleeping)
+        XCTAssertEqual(updated.state.sleepSource, .charging)
+    }
+
     func testTickMemorialisesWhenHealthReachesZero() throws {
         _ = try repository.createPet(name: "Mochi", avatarConfiguration: .default)
         let pet = try XCTUnwrap(repository.activePet)

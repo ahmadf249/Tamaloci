@@ -103,6 +103,7 @@ final class SDPetState {
     var isIll: Bool
     var conditionSummary: String
     var lastUpdatedAt: Date
+    var sleepSourceRaw: String = PetSleepSource.manual.rawValue
     var pet: SDPet?
 
     init(from state: PetRuntimeState = .activeDefaults) {
@@ -111,6 +112,7 @@ final class SDPetState {
         isIll = state.isIll
         conditionSummary = state.conditionSummary
         lastUpdatedAt = state.lastUpdatedAt
+        sleepSourceRaw = state.sleepSource.rawValue
     }
 
     var asDomain: PetRuntimeState {
@@ -119,7 +121,8 @@ final class SDPetState {
             isSleeping: isSleeping,
             isIll: isIll,
             conditionSummary: conditionSummary,
-            lastUpdatedAt: lastUpdatedAt
+            lastUpdatedAt: lastUpdatedAt,
+            sleepSource: PetSleepSource(rawValue: sleepSourceRaw) ?? .manual
         )
     }
 
@@ -129,6 +132,7 @@ final class SDPetState {
         isIll = state.isIll
         conditionSummary = state.conditionSummary
         lastUpdatedAt = state.lastUpdatedAt
+        sleepSourceRaw = state.sleepSource.rawValue
     }
 }
 

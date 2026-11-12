@@ -175,4 +175,103 @@ final class PetSimulationTests: XCTestCase {
         state.lifecycleStatus = .deceased
         XCTAssertEqual(PetSimulation.suggestedExpression(needs: .neutralDefaults, state: state), .deceased)
     }
+
+    func testHotWeatherIncreasesHydrationDrain() {
+        let env = EnvironmentSnapshotRecord(
+            temperatureCelsius: 32,
+            conditionCode: "hot",
+            capturedAt: t0
+        )
+        let context = SimulationContext(environment: env, batteryCharging: nil)
+        let t1 = t0.addingTimeInterval(4 * 3600)
+        let hot = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: context
+        )
+        let neutral = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: .empty
+        )
+        XCTAssertLessThan(hot.needs.hydration, neutral.needs.hydration)
+    }
+
+    func testColdWeatherIncreasesHappinessDrain() {
+        let env = EnvironmentSnapshotRecord(
+            temperatureCelsius: 5,
+            conditionCode: "cold",
+            capturedAt: t0
+        )
+        let context = SimulationContext(environment: env, batteryCharging: nil)
+        let t1 = t0.addingTimeInterval(4 * 3600)
+        let cold = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: context
+        )
+        let neutral = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: .empty
+        )
+        XCTAssertLessThan(cold.needs.happiness, neutral.needs.happiness)
+    }
+
+    func testStaleEnvironmentIsIgnored() {
+        let env = EnvironmentSnapshotRecord(
+            temperatureCelsius: 35,
+            conditionCode: "hot",
+            capturedAt: t0.addingTimeInterval(-24 * 3600)
+        )
+        let context = SimulationContext(environment: env, batteryCharging: nil)
+        let t1 = t0.addingTimeInterval(4 * 3600)
+        let stale = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: context
+        )
+        let neutral = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: .empty
+        )
+        XCTAssertEqual(stale.needs.hydration, neutral.needs.hydration, accuracy: 0.01)
+    }
+
+    func testChargingForcesSleep() {
+        let context = SimulationContext(environment: nil, batteryCharging: true)
+        let t1 = t0.addingTimeInterval(3600)
+        let result = PetSimulation.advance(
+            needs: .neutralDefaults, state: .activeDefaults, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: context
+        )
+        XCTAssertTrue(result.state.isSleeping)
+        XCTAssertEqual(result.state.sleepSource, .charging)
+    }
+
+    func testUnplugLeavesChargingSleep() {
+        var state = PetRuntimeState.activeDefaults
+        state.isSleeping = true
+        state.sleepSource = .charging
+        let context = SimulationContext(environment: nil, batteryCharging: false)
+        let t1 = t0.addingTimeInterval(3600)
+        let result = PetSimulation.advance(
+            needs: .neutralDefaults, state: state, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: context
+        )
+        XCTAssertFalse(result.state.isSleeping)
+        XCTAssertEqual(result.state.sleepSource, .manual)
+    }
+
+    func testManualSleepSurvivesUnplugWhenEnergyStillLow() {
+        var needs = PetNeeds.neutralDefaults
+        needs.energy = 40
+        var state = PetRuntimeState.activeDefaults
+        state.isSleeping = true
+        state.sleepSource = .manual
+        let context = SimulationContext(environment: nil, batteryCharging: false)
+        let t1 = t0.addingTimeInterval(3600)
+        let result = PetSimulation.advance(
+            needs: needs, state: state, lifeStage: .baby, birthDate: t0,
+            from: t0, to: t1, config: config, context: context
+        )
+        XCTAssertTrue(result.state.isSleeping)
+        XCTAssertEqual(result.state.sleepSource, .manual)
+        XCTAssertLessThan(result.needs.energy, config.autoWakeEnergyThreshold)
+    }
 }

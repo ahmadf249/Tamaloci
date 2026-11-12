@@ -27,6 +27,7 @@ struct PetRuntimeState: Equatable, Sendable {
     var isIll: Bool
     var conditionSummary: String
     var lastUpdatedAt: Date
+    var sleepSource: PetSleepSource
 
     /// Fresh active defaults — `lastUpdatedAt` is always “now” (not a one-shot static).
     static var activeDefaults: PetRuntimeState {
@@ -35,7 +36,8 @@ struct PetRuntimeState: Equatable, Sendable {
             isSleeping: false,
             isIll: false,
             conditionSummary: "healthy",
-            lastUpdatedAt: Date()
+            lastUpdatedAt: Date(),
+            sleepSource: .manual
         )
     }
 }

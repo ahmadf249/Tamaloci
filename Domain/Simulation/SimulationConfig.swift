@@ -44,6 +44,15 @@ struct SimulationConfig: Equatable, Sendable {
     var autoSleepEnergyThreshold: Double
     var autoWakeEnergyThreshold: Double
 
+    /// Environment snapshot older than this is ignored (neutral rates).
+    var environmentMaxAgeHours: Double
+    /// Temp above this (°C) multiplies hydration drain.
+    var hotTemperatureCelsius: Double
+    var hotHydrationDrainMultiplier: Double
+    /// Temp below this (°C) multiplies happiness drain.
+    var coldTemperatureCelsius: Double
+    var coldHappinessDrainMultiplier: Double
+
     static let `default` = SimulationConfig(
         hungerDrainPerHour: 4,
         hydrationDrainPerHour: 5,
@@ -69,6 +78,11 @@ struct SimulationConfig: Equatable, Sendable {
         teenagerAgeDays: 7,
         adultAgeDays: 14,
         autoSleepEnergyThreshold: 0,
-        autoWakeEnergyThreshold: 80
+        autoWakeEnergyThreshold: 80,
+        environmentMaxAgeHours: 6,
+        hotTemperatureCelsius: 28,
+        hotHydrationDrainMultiplier: 1.25,
+        coldTemperatureCelsius: 10,
+        coldHappinessDrainMultiplier: 1.15
     )
 }

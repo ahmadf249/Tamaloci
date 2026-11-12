@@ -34,11 +34,13 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_NSCameraUsageDescription: 'TAMA"LO"CI uses the camera for a short face scan to style your pet avatar. Photos are not kept after setup.'
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: 'TAMA"LO"CI uses your location once to check local weather so temperature can affect your pet’s comfort. Location is not stored.'
         GENERATE_INFOPLIST_FILE: YES
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: "0.1.0"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: Resources/Tamaloci.entitlements
         ENABLE_TESTABILITY: YES
     dependencies: []
   TamalociTests:

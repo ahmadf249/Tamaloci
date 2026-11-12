@@ -111,12 +111,12 @@ struct PetHomeView: View {
             }
         }
         .onAppear {
-            runTickAndSyncExpression()
             characterViewID = UUID()
+            Task { await runDeviceTickAndSyncExpression() }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
-                runTickAndSyncExpression()
+                Task { await runDeviceTickAndSyncExpression() }
             }
         }
     }
@@ -182,9 +182,9 @@ struct PetHomeView: View {
         days == 1 ? "1 day" : "\(days) days"
     }
 
-    private func runTickAndSyncExpression() {
+    private func runDeviceTickAndSyncExpression() async {
         appModel.repository.refresh()
-        if let result = appModel.tickActivePet() {
+        if let result = await appModel.refreshDeviceIntegrationsAndTick() {
             if case .deceased = result { return }
         }
         syncExpressionFromPet()
@@ -197,9 +197,14 @@ struct PetHomeView: View {
 
     private func performCare(_ type: CareEventType) {
         do {
-            let result = try appModel.repository.performCare(type)
+            let context = SimulationContext(
+                environment: appModel.repository.latestEnvironmentSnapshot(),
+                batteryCharging: BatterySleepMonitor.shared.isCharging
+            )
+            let result = try appModel.repository.performCare(type, context: context)
             appModel.applyTickResult(result)
             if case .deceased = result { return }
+            Task { await CareNotificationScheduler.shared.sync(pet: appModel.repository.activePet) }
             syncExpressionFromPet()
             statusMessage = "\(type.displayName) ✓"
             triggerCareFeedback()
