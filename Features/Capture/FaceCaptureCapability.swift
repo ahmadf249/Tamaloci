@@ -18,5 +18,6 @@ enum FaceCaptureCapability {
 enum CaptureRoute: String, Equatable {
     case arkit
     case selfie
+    case memojiSticker
     case manual
 }

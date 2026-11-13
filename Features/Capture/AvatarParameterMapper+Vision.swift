@@ -6,18 +6,19 @@ import Vision
 extension AvatarParameterMapper {
     /// Estimate stylized params from a still selfie using Vision landmarks + color sampling.
     static func estimate(fromSelfie image: UIImage) -> FaceEstimate {
-        guard let cgImage = image.cgImage else { return .average }
+        guard let cgImage = image.tamaloci_rasterizedCGImage() else { return .average }
 
         let request = VNDetectFaceLandmarksRequest()
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: .up, options: [:])
         do {
             try handler.perform([request])
         } catch {
-            return .average
+            return appearanceOnlyEstimate(from: cgImage, preferStickerBounds: false)
         }
 
         guard let face = request.results?.first else {
-            return .average
+            // No photographic face (common for stickers / failed selfie) — still sample colors.
+            return appearanceOnlyEstimate(from: cgImage, preferStickerBounds: false)
         }
 
         let box = face.boundingBox
@@ -79,6 +80,83 @@ extension AvatarParameterMapper {
         )
     }
 
+    /// Memoji / Genmoji stickers rarely pass Vision face detection. Rasterize, crop to opaque
+    /// silhouette, sample colors, and derive light morphs from the sticker aspect ratio.
+    static func estimate(fromSticker image: UIImage) -> FaceEstimate {
+        guard let cgImage = image.tamaloci_rasterizedCGImage() else { return .average }
+
+        let bounds = LikenessSampler.opaqueContentBounds(in: cgImage)
+        let appearance = LikenessSampler.sample(cgImage: cgImage, contentBounds: bounds)
+        let silhouette = appearanceOnlyEstimate(from: cgImage, preferStickerBounds: true)
+
+        // If Vision detects a face, borrow geometry; always prefer sticker color samples.
+        let request = VNDetectFaceLandmarksRequest()
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: .up, options: [:])
+        if (try? handler.perform([request])) != nil, request.results?.first != nil {
+            let selfie = estimate(fromSelfie: image)
+            return FaceEstimate(
+                faceWidth: selfie.faceWidth,
+                jawWidth: selfie.jawWidth,
+                eyeSpacing: selfie.eyeSpacing,
+                eyeSize: selfie.eyeSize,
+                browScale: selfie.browScale,
+                noseScale: selfie.noseScale,
+                mouthWidth: selfie.mouthWidth,
+                faceLength: selfie.faceLength,
+                hairCoverage: appearance.hairCoverage,
+                skinTint: appearance.skin ?? selfie.skinTint,
+                hairColor: appearance.hair ?? selfie.hairColor,
+                irisColor: appearance.iris ?? selfie.irisColor
+            )
+        }
+
+        return FaceEstimate(
+            faceWidth: silhouette.faceWidth,
+            jawWidth: silhouette.jawWidth,
+            eyeSpacing: silhouette.eyeSpacing,
+            eyeSize: silhouette.eyeSize,
+            browScale: silhouette.browScale,
+            noseScale: silhouette.noseScale,
+            mouthWidth: silhouette.mouthWidth,
+            faceLength: silhouette.faceLength,
+            hairCoverage: appearance.hairCoverage,
+            skinTint: appearance.skin,
+            hairColor: appearance.hair,
+            irisColor: appearance.iris
+        )
+    }
+
+    private static func appearanceOnlyEstimate(
+        from cgImage: CGImage,
+        preferStickerBounds: Bool
+    ) -> FaceEstimate {
+        let bounds = preferStickerBounds
+            ? LikenessSampler.opaqueContentBounds(in: cgImage)
+            : CGRect(x: 0, y: 0, width: 1, height: 1)
+        let appearance = LikenessSampler.sample(cgImage: cgImage, contentBounds: bounds)
+
+        let aspect = Float(bounds.width / max(bounds.height, 0.001))
+        // Wider silhouette → slightly wider head; taller → longer face.
+        let faceWidth = (0.95 + (aspect - 0.85) * 0.35).clamped(to: 0.85...1.2)
+        let faceLength = (1.05 - (aspect - 0.85) * 0.25).clamped(to: 0.9...1.15)
+        let jawWidth = faceWidth
+
+        return FaceEstimate(
+            faceWidth: faceWidth,
+            jawWidth: jawWidth,
+            eyeSpacing: 1,
+            eyeSize: 1.05,
+            browScale: 1,
+            noseScale: 1,
+            mouthWidth: 1.05,
+            faceLength: faceLength,
+            hairCoverage: appearance.hairCoverage,
+            skinTint: appearance.skin,
+            hairColor: appearance.hair,
+            irisColor: appearance.iris
+        )
+    }
+
     private static func centroid(_ points: [CGPoint]) -> CGPoint? {
         guard !points.isEmpty else { return nil }
         let sum = points.reduce(CGPoint.zero) { CGPoint(x: $0.x + $1.x, y: $0.y + $1.y) }
@@ -88,6 +166,22 @@ extension AvatarParameterMapper {
     private static func span(_ points: [CGPoint]) -> CGFloat {
         guard let minX = points.map(\.x).min(), let maxX = points.map(\.x).max() else { return 0 }
         return maxX - minX
+    }
+}
+
+extension UIImage {
+    /// Ensures a bitmap `CGImage` even when `cgImage` is nil (common for HEIC / glyph payloads).
+    func tamaloci_rasterizedCGImage() -> CGImage? {
+        if let cgImage { return cgImage }
+        let target = size
+        guard target.width > 1, target.height > 1 else { return nil }
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = max(scale, 1)
+        format.opaque = false
+        let rendered = UIGraphicsImageRenderer(size: target, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: target))
+        }
+        return rendered.cgImage
     }
 }
 

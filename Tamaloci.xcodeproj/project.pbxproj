@@ -18,6 +18,7 @@
 		231FCA7FE21A69E55E98FA54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BE9A10EA4053D1DA69F213D /* Assets.xcassets */; };
 		24421B10D78C5989582A35A5 /* AvatarColor+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E98DB28EE681515D231473 /* AvatarColor+UIKit.swift */; };
 		2B18131F6BABE3D4DD0FA597 /* LikenessSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */; };
+		2C5674ECA2F06B46A4077942 /* MemojiStickerCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B667193372A5CABFF0B5B6 /* MemojiStickerCaptureView.swift */; };
 		332E35EBA854703A6F56C6EC /* CareRecency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A17D95CF868E687856EB314 /* CareRecency.swift */; };
 		33372781DC9219E46869CAA6 /* AvatarParameterMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93C572839BBDC6D8B72CAE1 /* AvatarParameterMapper.swift */; };
 		33AD133FEC1B9230BBDE256E /* PetSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB36003D6DE9A925487A3478 /* PetSimulation.swift */; };
@@ -112,6 +113,7 @@
 		72F43928ADA43B5792BCE8FD /* PetNamingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNamingView.swift; sourceTree = "<group>"; };
 		7389A5C4DCC41EC18FA5B77E /* PetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetRepository.swift; sourceTree = "<group>"; };
 		78B779D2BE1DF9106ACBA9E5 /* AvatarParameterMapper+Vision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarParameterMapper+Vision.swift"; sourceTree = "<group>"; };
+		81B667193372A5CABFF0B5B6 /* MemojiStickerCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemojiStickerCaptureView.swift; sourceTree = "<group>"; };
 		828AF2E62AE0F25C5B957BAC /* AvatarConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarConfigurationTests.swift; sourceTree = "<group>"; };
 		892A43B806FAA1E2284FB0C5 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		900BE280EC1A045B28B02EDF /* PetLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLifecycle.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				0400F3672E8465AA40B03CA5 /* CameraPermission.swift */,
 				AF66499A934C9CD7861BC85B /* FaceCaptureCapability.swift */,
 				6FD497F4D949F00F12BCEEE9 /* LikenessSampler.swift */,
+				81B667193372A5CABFF0B5B6 /* MemojiStickerCaptureView.swift */,
 				0A3C2BD4990A3FA7DCE3266E /* SelfieCaptureView.swift */,
 			);
 			path = Capture;
@@ -515,6 +518,7 @@
 				5C181A77BA59FD9E1A3A3B51 /* CreatedPetStore.swift in Sources */,
 				DEDDBAA6BDF8C980AFFC2A1D /* FaceCaptureCapability.swift in Sources */,
 				2B18131F6BABE3D4DD0FA597 /* LikenessSampler.swift in Sources */,
+				2C5674ECA2F06B46A4077942 /* MemojiStickerCaptureView.swift in Sources */,
 				E3C0FEA001E0739B95575BA9 /* MemorialListView.swift in Sources */,
 				709F48FFE8D13A311A76544D /* OnboardingFlowView.swift in Sources */,
 				10270A1F42E0DA721C12A203 /* PetAnimationController.swift in Sources */,

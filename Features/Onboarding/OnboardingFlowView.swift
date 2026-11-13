@@ -17,6 +17,7 @@ struct OnboardingFlowView: View {
     @State private var statusMessage: String?
     @State private var isCapturing = false
     @State private var showSelfiePicker = false
+    @State private var showMemojiStickerPicker = false
     @State private var arkitService = ARKitFaceCaptureService()
     @State private var liveEstimate: AvatarParameterMapper.FaceEstimate = .average
     /// Bumped on Retry so `ARFaceLivePreviewView` remounts and restarts the session.
@@ -35,7 +36,7 @@ struct OnboardingFlowView: View {
             SelfieCaptureView(
                 onCapture: { image in
                     showSelfiePicker = false
-                    applySelfie(image)
+                    applyLikenessImage(image, sourceLabel: "Selfie")
                 },
                 onCancel: {
                     showSelfiePicker = false
@@ -44,6 +45,19 @@ struct OnboardingFlowView: View {
                 }
             )
             .ignoresSafeArea()
+        }
+        .sheet(isPresented: $showMemojiStickerPicker) {
+            MemojiStickerCaptureView(
+                onCapture: { image in
+                    showMemojiStickerPicker = false
+                    applyStickerImage(image)
+                },
+                onCancel: {
+                    showMemojiStickerPicker = false
+                    statusMessage = "Sticker cancelled — you can edit manually."
+                    step = .editor
+                }
+            )
         }
         .onDisappear {
             arkitService.tearDown()
@@ -79,6 +93,7 @@ struct OnboardingFlowView: View {
             CameraExplainStep(
                 preferredRoute: FaceCaptureCapability.preferredRoute,
                 onContinue: beginCaptureFlow,
+                onUseMemojiSticker: beginMemojiStickerFlow,
                 onSkipManual: {
                     route = .manual
                     configuration = .default
@@ -151,12 +166,23 @@ struct OnboardingFlowView: View {
         }
     }
 
+    private func beginMemojiStickerFlow() {
+        arkitService.tearDown()
+        route = .memojiSticker
+        statusMessage = nil
+        step = .capture
+        showMemojiStickerPicker = true
+    }
+
     private func retryCapture() {
         arkitService.tearDown()
         liveEstimate = .average
         captureSessionID = UUID()
         statusMessage = "Restarting capture…"
-        if route == .arkit || FaceCaptureCapability.isARFaceTrackingSupported {
+        if route == .memojiSticker {
+            step = .capture
+            showMemojiStickerPicker = true
+        } else if route == .arkit || FaceCaptureCapability.isARFaceTrackingSupported {
             route = .arkit
             step = .capture
             statusMessage = "Align your face — tap Use this look when ready."
@@ -167,11 +193,23 @@ struct OnboardingFlowView: View {
         }
     }
 
-    private func applySelfie(_ image: UIImage) {
+    /// Maps an ephemeral likeness image (selfie) into avatar morphs.
+    private func applyLikenessImage(_ image: UIImage, sourceLabel: String) {
         let estimate = AvatarParameterMapper.estimate(fromSelfie: image)
         configuration = AvatarParameterMapper.makeConfiguration(from: estimate)
         // Ephemeral: drop image reference after mapping (no disk save).
-        statusMessage = "Selfie mapped — tweak anything you like."
+        statusMessage = "\(sourceLabel) mapped — tweak anything you like."
+        step = .editor
+    }
+
+    /// Memoji/Genmoji stickers: color/silhouette mapping (Vision rarely detects cartoon faces).
+    private func applyStickerImage(_ image: UIImage) {
+        let estimate = AvatarParameterMapper.estimate(fromSticker: image)
+        configuration = AvatarParameterMapper.makeConfiguration(from: estimate)
+        let tinted = estimate.skinTint != nil || estimate.hairColor != nil
+        statusMessage = tinted
+            ? "Sticker colors applied — tweak anything you like."
+            : "Sticker captured, but colors were unclear — tweak manually."
         step = .editor
     }
 
@@ -202,6 +240,7 @@ struct OnboardingFlowView: View {
 private struct CameraExplainStep: View {
     let preferredRoute: CaptureRoute
     let onContinue: () -> Void
+    let onUseMemojiSticker: () -> Void
     let onSkipManual: () -> Void
 
     var body: some View {
@@ -209,7 +248,7 @@ private struct CameraExplainStep: View {
             Text("Create a pet that feels like you")
                 .font(.title2.weight(.bold))
 
-            Text("We’ll use the front camera for a short face scan to style a custom floating head. We never use Apple Memoji, and we don’t keep your photo after setup.")
+            Text("We’ll use a short face scan (or an optional Memoji sticker from the keyboard) to style a custom floating head. Images aren’t kept after setup — only stylized look parameters.")
                 .font(.body)
                 .foregroundStyle(.secondary)
 
@@ -220,7 +259,8 @@ private struct CameraExplainStep: View {
                         : "This device will use a selfie + landmarks (or manual).",
                     systemImage: "face.dashed"
                 )
-                Label("You can skip the camera and edit looks by hand.", systemImage: "slider.horizontal.3")
+                Label("Or insert a Memoji sticker from the emoji keyboard.", systemImage: "face.smiling")
+                Label("You can skip and edit looks by hand.", systemImage: "slider.horizontal.3")
                 Label("Face tracking stops after setup — mood comes from pet care later.", systemImage: "hand.raised")
             }
             .font(.subheadline)
@@ -235,6 +275,9 @@ private struct CameraExplainStep: View {
                     .padding(.vertical, 12)
             }
             .buttonStyle(.borderedProminent)
+
+            Button("Use Memoji sticker instead", action: onUseMemojiSticker)
+                .frame(maxWidth: .infinity)
 
             Button("Skip camera — edit manually", action: onSkipManual)
                 .frame(maxWidth: .infinity)
@@ -268,7 +311,7 @@ private struct CaptureInProgressStep: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .padding(.horizontal, 16)
 
-                Text("Live likeness — skin, hair, eyes, and face shape update from your face (stylized, not Memoji).")
+                Text("Live likeness — skin, hair, eyes, and face shape update from your face (stylized floating head).")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -276,6 +319,17 @@ private struct CaptureInProgressStep: View {
 
                 Button("Use this look", action: onUseLiveEstimate)
                     .buttonStyle(.borderedProminent)
+                    .padding(.horizontal, 24)
+            } else if route == .memojiSticker {
+                Spacer()
+                ProgressView()
+                    .controlSize(.large)
+                Text("Waiting for Memoji sticker…")
+                    .font(.title3.weight(.semibold))
+                Text("Insert a sticker from the emoji keyboard in the sheet.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
                     .padding(.horizontal, 24)
             } else {
                 Spacer()

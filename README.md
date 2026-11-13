@@ -32,7 +32,7 @@ Product roadmap, requirements PDF, asset policy, and runbook live in a local `do
 - Expanded `AvatarConfiguration` morphs + Vision/ARKit mappers (never raw face mesh as pet)
 - CC0 low-poly head selected and provenance-logged; procedural fallback until `TamalociHead.usdz` is exported
 - Camera usage string; denied camera still reaches create via manual editor
-- No Apple Memoji / private APIs
+- No private Memoji/AvatarKit APIs; optional Memoji/Genmoji sticker via system keyboard (`UITextView`) maps to stylized params only (image not kept)
 
 ## Open in Xcode
 
